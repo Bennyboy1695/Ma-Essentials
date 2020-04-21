@@ -1,11 +1,10 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
-import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -21,11 +20,10 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
 import static com.maciej916.maessentials.libs.Methods.requestTeleport;
-import static com.maciej916.maessentials.libs.Methods.simpleTeleport;
 
 public class CommandTpa{
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("tpa").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("tpa").requires(Utils.hasPermission(PermissionStrings.COMMAND.TPA));
         builder
             .executes(context -> tpa(context))
             .then(Commands.argument("targetPlayer", EntityArgument.players())
@@ -35,7 +33,7 @@ public class CommandTpa{
 
     private static int tpa(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
+        player.sendMessage(Utils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -50,13 +48,13 @@ public class CommandTpa{
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (player == target) {
-            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.self"));
+            player.sendMessage(Utils.translateFromJson("tpa.maessentials.self"));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("tpa", ConfigValues.tpa_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return;
         }
 
@@ -64,22 +62,22 @@ public class CommandTpa{
         eslPlayer.saveData();
 
         if (requestTeleport(player, player, target, ConfigValues.tpa_timeout)) {
-            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request", target.getDisplayName().getFormattedText()));
-            target.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request.target", player.getDisplayName().getFormattedText()));
+            player.sendMessage(Utils.translateFromJson("tpa.maessentials.request", target.getDisplayName().getFormattedText()));
+            target.sendMessage(Utils.translateFromJson("tpa.maessentials.request.target", player.getDisplayName().getFormattedText()));
 
             ClickEvent clickEventAccept = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpaccept " + player.getDisplayName().getFormattedText());
-            HoverEvent eventHoverAccept = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("tpa.maessentials.request.target.accept.hover", "/tpaccept " + player.getDisplayName().getFormattedText()));
+            HoverEvent eventHoverAccept = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.translateFromJson("tpa.maessentials.request.target.accept.hover", "/tpaccept " + player.getDisplayName().getFormattedText()));
             TextComponent textAccept = new StringTextComponent("/tpaccept");
             textAccept.getStyle().setClickEvent(clickEventAccept);
             textAccept.getStyle().setHoverEvent(eventHoverAccept);
-            target.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request.target.accept", textAccept));
+            target.sendMessage(Utils.translateFromJson("tpa.maessentials.request.target.accept", textAccept.getFormattedText()));
 
             ClickEvent clickEventDeny = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpdeny " + player.getDisplayName().getFormattedText());
-            HoverEvent eventHoverDeny = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("tpa.maessentials.request.target.deny.hover", "/tpdeny " + player.getDisplayName().getFormattedText()));
+            HoverEvent eventHoverDeny = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.translateFromJson("tpa.maessentials.request.target.deny.hover", "/tpdeny " + player.getDisplayName().getFormattedText()));
             TextComponent textDeny = new StringTextComponent("/tpdeny");
             textDeny.getStyle().setClickEvent(clickEventDeny);
             textDeny.getStyle().setHoverEvent(eventHoverDeny);
-            target.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request.target.deny", textDeny));
+            target.sendMessage(Utils.translateFromJson("tpa.maessentials.request.target.deny", textDeny.getFormattedText()));
         }
     }
 }

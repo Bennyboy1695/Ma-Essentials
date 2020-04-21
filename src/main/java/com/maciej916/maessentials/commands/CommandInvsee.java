@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextComponent;
 public class CommandInvsee {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("invsee").requires((source) -> source.hasPermissionLevel(4))
+        dispatcher.register(Commands.literal("invsee").requires(Utils.hasPermission(PermissionStrings.COMMAND.INV_SEE))
                 .then(Commands.argument("targetPlayer", EntityArgument.players()).executes((context) -> invsee(context.getSource(), EntityArgument.getPlayer(context, "targetPlayer"))))
         );
     }
@@ -25,9 +25,9 @@ public class CommandInvsee {
     private static int invsee(CommandSource source, ServerPlayerEntity target) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
         if (player == target) {
-            player.sendMessage(TextUtils.translateFromJson("invsee.maessentials.self"));
+            player.sendMessage(Utils.translateFromJson("invsee.maessentials.self"));
         } else {
-            TextComponent name = (TextComponent) TextUtils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), "Inventory");
+            TextComponent name = (TextComponent) Utils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), "Inventory");
             player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {
                 return new ChestContainer(ContainerType.GENERIC_9X4, id, player.inventory, target.inventory, 4);
             }, name));

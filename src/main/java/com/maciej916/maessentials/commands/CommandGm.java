@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -14,7 +14,6 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.GameType;
 
 public class CommandGm {
@@ -24,21 +23,21 @@ public class CommandGm {
     };
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("gm").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("gm").requires(Utils.hasPermission(PermissionStrings.COMMAND.GAMEMODE));
         builder
                 .executes(context -> gm(context))
                         .then(Commands.argument("gamemode", IntegerArgumentType.integer())
                         .suggests(GM_SUGGEST)
                         .executes(context -> gmSelf(context))
                                 .then(Commands.argument("targetPlayer", EntityArgument.players())
-                                .executes(context -> gmOthers(context))));
+                                .requires(Utils.hasPermission(PermissionStrings.COMMAND.GAMEMODE_OTHERS)).executes(context -> gmOthers(context))));
 
         dispatcher.register(builder);
     }
 
     private static int gm(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
+        player.sendMessage(Utils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -85,16 +84,16 @@ public class CommandGm {
                 }
                 break;
             default :
-                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.invalid"));
+                player.sendMessage(Utils.translateFromJson("gm.maessentials.invalid"));
         }
 
         if (changed) {
             String newGm = targetPlayer.interactionManager.getGameType().getDisplayName().getFormattedText();
             if (player == targetPlayer) {
-                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.self", newGm));
+                player.sendMessage(Utils.translateFromJson("gm.maessentials.self", newGm));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.player", targetPlayer.getDisplayName().getFormattedText(), newGm));
-                targetPlayer.sendMessage(TextUtils.translateFromJson("gm.maessentials.self", newGm));
+                player.sendMessage(Utils.translateFromJson("gm.maessentials.player", targetPlayer.getDisplayName().getFormattedText(), newGm));
+                targetPlayer.sendMessage(Utils.translateFromJson("gm.maessentials.self", newGm));
             }
         }
     }

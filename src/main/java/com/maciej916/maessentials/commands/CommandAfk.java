@@ -1,11 +1,11 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 public class CommandAfk {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("afk").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("afk").requires(Utils.hasPermission(PermissionStrings.COMMAND.AFK));
         builder.executes(context -> afk(context));
         dispatcher.register(builder);
     }
@@ -29,7 +29,7 @@ public class CommandAfk {
 
         long cooldown = eslPlayer.getUsage().getCommandCooldown("afk", ConfigValues.afk_command_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -37,7 +37,7 @@ public class CommandAfk {
             eslPlayer.getUsage().setCommandUsage("afk");
             eslPlayer.saveData();
 
-            player.sendMessage(TextUtils.translateFromJson("afk.maessentials.afk.true", player.getDisplayName().getFormattedText()));
+            player.sendMessage(Utils.translateFromJson("afk.maessentials.afk.true", player.getDisplayName().getFormattedText()));
             eslPlayer.getTemp().setLocation(new Location(player));
             eslPlayer.getTemp().setAfk(true);
         }

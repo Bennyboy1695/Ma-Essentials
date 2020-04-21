@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,11 +16,11 @@ import net.minecraft.world.GameType;
 public class CommandFly {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("fly").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("fly").requires(Utils.hasPermission(PermissionStrings.COMMAND.FLY));
         builder
                 .executes(context -> fly(context))
                         .then(Commands.argument("targetPlayer", EntityArgument.players())
-                                .executes(context -> flyArgs(context)));
+                                .requires(Utils.hasPermission(PermissionStrings.COMMAND.FLY_OTHERS)).executes(context -> flyArgs(context)));
 
         dispatcher.register(builder);
     }
@@ -41,9 +41,9 @@ public class CommandFly {
     private static void flyManage(ServerPlayerEntity player, ServerPlayerEntity target) {
         if (target.interactionManager.getGameType() == GameType.CREATIVE || target.interactionManager.getGameType() == GameType.SPECTATOR) {
             if (player == target) {
-                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode"));
+                target.sendMessage(Utils.translateFromJson("maessentials.invaild_gamemode"));
             } else {
-                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
+                target.sendMessage(Utils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
             }
             return;
         }
@@ -53,19 +53,19 @@ public class CommandFly {
             target.abilities.isFlying = false;
 
             if (player == target) {
-                player.sendMessage(TextUtils.translateFromJson("fly.maessentials.self.disabled"));
+                player.sendMessage(Utils.translateFromJson("fly.maessentials.self.disabled"));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("fly.maessentials.player.disabled", target.getDisplayName().getFormattedText()));
-                target.sendMessage(TextUtils.translateFromJson("fly.maessentials.self.disabled"));
+                player.sendMessage(Utils.translateFromJson("fly.maessentials.player.disabled", target.getDisplayName().getFormattedText()));
+                target.sendMessage(Utils.translateFromJson("fly.maessentials.self.disabled"));
             }
         } else {
             target.abilities.allowFlying = true;
 
             if (player == target) {
-                player.sendMessage(TextUtils.translateFromJson("fly.maessentials.self.enabled"));
+                player.sendMessage(Utils.translateFromJson("fly.maessentials.self.enabled"));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("fly.maessentials.player.enabled", target.getDisplayName().getFormattedText()));
-                target.sendMessage(TextUtils.translateFromJson("fly.maessentials.self.enabled"));
+                player.sendMessage(Utils.translateFromJson("fly.maessentials.player.enabled", target.getDisplayName().getFormattedText()));
+                target.sendMessage(Utils.translateFromJson("fly.maessentials.self.enabled"));
             }
         }
         target.sendPlayerAbilities();

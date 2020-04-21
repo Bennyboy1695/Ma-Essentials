@@ -1,10 +1,10 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Time;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -24,7 +24,7 @@ import static com.maciej916.maessentials.libs.Methods.currentTimestamp;
 public class CommandMute {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("mute").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("mute").requires(Utils.hasPermission(PermissionStrings.COMMAND.MUTE));
         builder
                 .executes(context -> mute(context))
                         .then(Commands.argument("targetPlayer", EntityArgument.players())
@@ -39,13 +39,13 @@ public class CommandMute {
 
     private static int mute(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
+        player.sendMessage(Utils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int mutePlayer(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("mute.maessentials.provide.time"));
+        player.sendMessage(Utils.translateFromJson("mute.maessentials.provide.time"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -76,12 +76,12 @@ public class CommandMute {
         }
 
         if (mutetime == 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.illegal_date"));
+            player.sendMessage(Utils.translateFromJson("maessentials.illegal_date"));
             return;
         }
 
         if (mute != null && (currentTimestamp() < mute.getTime() ||  mute.getTime() == -1)) {
-            player.sendMessage(TextUtils.translateFromJson("mute.maessentials.already_muted", target.getDisplayName().getFormattedText()));
+            player.sendMessage(Utils.translateFromJson("mute.maessentials.already_muted", target.getDisplayName().getFormattedText()));
             return;
         }
 
@@ -89,14 +89,14 @@ public class CommandMute {
         eslTargetPlayer.saveData();
 
         if (mutetime == -1) {
-            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("mute.maessentials.success.perm", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), reason));
-            target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.perm.target"));
+            player.server.getPlayerList().sendMessage(Utils.translateFromJson("mute.maessentials.success.perm", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), reason));
+            target.sendMessage(Utils.translateFromJson("mute.maessentials.success.perm.target"));
         } else {
             String displayTime = Time.formatDate(mutetime - currentTimestamp());
-            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("mute.maessentials.success", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), displayTime, reason));
-            target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target", displayTime));
+            player.server.getPlayerList().sendMessage(Utils.translateFromJson("mute.maessentials.success", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), displayTime, reason));
+            target.sendMessage(Utils.translateFromJson("mute.maessentials.success.target", displayTime));
         }
 
-        target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target.reason", reason));
+        target.sendMessage(Utils.translateFromJson("mute.maessentials.success.target.reason", reason));
     }
 }

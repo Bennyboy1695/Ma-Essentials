@@ -1,9 +1,9 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -17,7 +17,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class CommandSetWarp {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("setwarp").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("setwarp").requires(Utils.hasPermission(PermissionStrings.COMMAND.WARP_SET));
         builder
                 .executes(context -> warp(context))
                     .then(Commands.argument("warpName", StringArgumentType.string())
@@ -36,9 +36,9 @@ public class CommandSetWarp {
         String warpName = StringArgumentType.getString(context, "warpName").toLowerCase();
 
         if (DataManager.getWarp().setWarp(warpName, new Location(player))) {
-            player.sendMessage(TextUtils.translateFromJson("setwarp.maessentials.success", warpName));
+            player.sendMessage(Utils.translateFromJson("setwarp.maessentials.success", warpName));
         } else {
-            player.sendMessage(TextUtils.translateFromJson("setwarp.maessentials.exist", warpName));
+            player.sendMessage(Utils.translateFromJson("setwarp.maessentials.exist", warpName));
         }
 
         return Command.SINGLE_SUCCESS;

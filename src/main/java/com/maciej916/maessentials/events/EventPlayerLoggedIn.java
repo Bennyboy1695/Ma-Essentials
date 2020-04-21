@@ -1,11 +1,10 @@
 package com.maciej916.maessentials.events;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.kit.Kit;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
-import com.maciej916.maessentials.classes.player.PlayerRestrictions;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Log;
@@ -34,6 +33,16 @@ public class EventPlayerLoggedIn {
                 }
             }
 
+            if (eslPlayer.isNeedingSpawnMove()) {
+                Log.debug("Spawn move is true for " + eslPlayer.getUsername());
+                Location spawnLocation = DataManager.getWorld().getSpawn();
+                if (spawnLocation != null) {
+                    Teleport.doTeleport(player, spawnLocation, true, false);
+                }
+                eslPlayer.setNeedingSpawnMove(false);
+                eslPlayer.saveData();
+            }
+
             if (ConfigValues.kits_starting) {
                 Kit kit = DataManager.getKit().getKit(ConfigValues.kits_starting_name);
                 if (Methods.giveKit(player, kit)) {
@@ -46,11 +55,11 @@ public class EventPlayerLoggedIn {
             PlayerRestriction ban = eslPlayerExisted.getRestrictions().getBan();
             if (ban != null) {
                 if (ban.getTime() == -1) {
-                    player.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.perm.target", player.getDisplayName().getFormattedText(), ban.getReason()));
+                    player.connection.disconnect(Utils.translateFromJson("tempban.maessentials.success.perm.target", player.getDisplayName().getFormattedText(), ban.getReason()));
                 } else {
                    if (ban.getTime() > currentTimestamp()) {
                        String displayTime = Time.formatDate(ban.getTime() - currentTimestamp());
-                       player.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.target", player.getDisplayName().getFormattedText(), displayTime, ban.getReason()));
+                       player.connection.disconnect(Utils.translateFromJson("tempban.maessentials.success.target", player.getDisplayName().getFormattedText(), displayTime, ban.getReason()));
                    }
                 }
             }

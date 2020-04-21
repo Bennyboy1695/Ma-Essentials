@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -20,11 +20,11 @@ import static net.minecraft.block.EnderChestBlock.field_220115_d;
 public class CommandEndc {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("endc").requires(source -> source.hasPermissionLevel(4));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("endc").requires(Utils.hasPermission(PermissionStrings.COMMAND.ENDERCHEST));
         builder
                 .executes(context -> endc(context))
                 .then(Commands.argument("targetPlayer", EntityArgument.players())
-                        .executes(context -> endcArgs(context)));
+                        .requires(Utils.hasPermission(PermissionStrings.COMMAND.ENDERCHEST_OTHERS)).executes(context -> endcArgs(context)));
 
         dispatcher.register(builder);
     }
@@ -45,7 +45,7 @@ public class CommandEndc {
     private static void doEndc(ServerPlayerEntity player, ServerPlayerEntity target) {
         TextComponent endc = field_220115_d;
         if (player != target) {
-            endc = (TextComponent) TextUtils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), endc);
+            endc = (TextComponent) Utils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), endc);
         }
 
         player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {

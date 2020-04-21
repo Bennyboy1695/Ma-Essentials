@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,7 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 public class CommandBroadcast {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("broadcast").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("broadcast").requires(Utils.hasPermission(PermissionStrings.COMMAND.BROADCAST));
         builder
                 .executes(context -> broadcast(context))
                         .then(Commands.argument("message", MessageArgument.message())
@@ -26,14 +26,14 @@ public class CommandBroadcast {
 
     private static int broadcast(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("broadcast.maessentials.no_message"));
+        player.sendMessage(Utils.translateFromJson("broadcast.maessentials.no_message"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int broadcastArgs(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
         ITextComponent reason = MessageArgument.getMessage(context, "message");
-        player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("broadcast.maessentials.success", reason));
+        player.server.getPlayerList().sendMessage(Utils.translateFromJson("broadcast.maessentials.success", reason));
         return Command.SINGLE_SUCCESS;
     }
 }

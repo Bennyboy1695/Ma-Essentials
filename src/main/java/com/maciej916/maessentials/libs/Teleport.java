@@ -1,6 +1,6 @@
 package com.maciej916.maessentials.libs;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.teleport.TeleportRequest;
@@ -57,13 +57,13 @@ public class Teleport {
 
     public static void acceptRequest(TeleportRequest request) {
         if (request.getDelay() == 0) {
-            request.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.request", request.getTargetName()));
-            request.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.target", request.getPlayerName()));
+            request.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.request", request.getTargetName()));
+            request.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.target", request.getPlayerName()));
             doTeleport(request.getPlayer(), request.getDestination(), true, true);
             teleportRequests.remove(request);
         } else {
-            request.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.request.wait", ConfigValues.tpa_delay));
-            request.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.target.wait", request.getPlayerName()));
+            request.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.request.wait", ConfigValues.tpa_delay));
+            request.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.target.wait", request.getPlayerName()));
             EssentialPlayer eslPlayer = DataManager.getPlayer(request.getPlayer());
             eslPlayer.getTemp().setTeleportActive(new Location(request.getPlayer()));
             request.setAccepted();
@@ -71,8 +71,8 @@ public class Teleport {
     }
 
     public static void declineRequest(TeleportRequest request) {
-        request.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpdeny.request", request.getTargetName()));
-        request.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpdeny.target", request.getPlayerName()));
+        request.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.tpdeny.request", request.getTargetName()));
+        request.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.tpdeny.target", request.getPlayerName()));
         teleportRequests.remove(request);
     }
 
@@ -94,7 +94,7 @@ public class Teleport {
                 Location tpLocation = eslPlayer.getTemp().getTeleportLocation();
                 if (checkLocation(playerLocation, tpLocation)) {
                     if (currentTimestamp() >= tp.getTeleportTime()) {
-                        player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.teleported"));
+                        player.sendMessage(Utils.translateFromJson("teleport.maessentials.teleported"));
                         eslPlayer.getTemp().setTeleportNotActive();
                         eslPlayer.getUsage().setTeleportUsage(tp.getType());
                         eslPlayer.saveData();
@@ -102,7 +102,7 @@ public class Teleport {
                         del.add(tp);
                     }
                 } else {
-                    player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.moved"));
+                    player.sendMessage(Utils.translateFromJson("teleport.maessentials.moved"));
                     eslPlayer.getTemp().setTeleportNotActive();
                     del.add(tp);
                 }
@@ -128,8 +128,8 @@ public class Teleport {
                     Location tpLocation = eslPlayer.getTemp().getTeleportLocation();
                     if (checkLocation(playerLocation, tpLocation)) {
                         if (currentTimestamp() >= tp.getTeleportTime()) {
-                            tp.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.request", tp.getTargetName()));
-                            tp.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.tpaccept.target", tp.getPlayerName()));
+                            tp.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.request", tp.getTargetName()));
+                            tp.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.tpaccept.target", tp.getPlayerName()));
                             eslPlayer.getTemp().setTeleportNotActive();
                             eslPlayer.getUsage().setTeleportUsage("tpa");
                             eslPlayer.saveData();
@@ -137,15 +137,15 @@ public class Teleport {
                             del.add(tp);
                         }
                     } else {
-                        tp.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.moved.request"));
-                        tp.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.moved.target", tp.getPlayerName()));
+                        tp.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.moved.request"));
+                        tp.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.moved.target", tp.getPlayerName()));
                         eslPlayer.getTemp().setTeleportNotActive();
                         del.add(tp);
                     }
                 } else {
                     if (currentTimestamp() >= tp.getTimeout()) {
-                        tp.getPlayer().sendMessage(TextUtils.translateFromJson("teleport.maessentials.expired.target", tp.getTargetName()));
-                        tp.getTarget().sendMessage(TextUtils.translateFromJson("teleport.maessentials.expired.request", tp.getPlayerName()));
+                        tp.getPlayer().sendMessage(Utils.translateFromJson("teleport.maessentials.expired.target", tp.getTargetName()));
+                        tp.getTarget().sendMessage(Utils.translateFromJson("teleport.maessentials.expired.request", tp.getPlayerName()));
                         del.add(tp);
                     }
                 }
@@ -173,7 +173,7 @@ public class Teleport {
             }
         } catch (Exception e) {
             Log.err("Failed to do teleport for player " + player.getDisplayName().getFormattedText() + ". Error: " + e.getMessage());
-            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.teleport.failed"));
+            player.sendMessage(Utils.translateFromJson("teleport.maessentials.teleport.failed"));
         }
     }
 }

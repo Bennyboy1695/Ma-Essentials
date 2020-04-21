@@ -1,8 +1,8 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.config.ConfigValues;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -18,9 +18,9 @@ public class CommandSpeed {
     private static final float walkSpeedDefault = 0.1F;
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("speed").requires((source) -> source.hasPermissionLevel(2))
+        dispatcher.register(Commands.literal("speed").requires(Utils.hasPermission(PermissionStrings.COMMAND.SPEED))
             .then(Commands.argument("speed", IntegerArgumentType.integer()).executes((context) -> speed(context.getSource(), IntegerArgumentType.getInteger(context, "speed")))
-                    .then(Commands.argument("targetPlayer", EntityArgument.players()).executes((context) -> speed(context.getSource(), IntegerArgumentType.getInteger(context, "speed"), EntityArgument.getPlayer(context, "targetPlayer"))))
+                    .then(Commands.argument("targetPlayer", EntityArgument.players()).requires(Utils.hasPermission(PermissionStrings.COMMAND.SPEED_OTHERS)).executes((context) -> speed(context.getSource(), IntegerArgumentType.getInteger(context, "speed"), EntityArgument.getPlayer(context, "targetPlayer"))))
             )
         );
     }
@@ -40,28 +40,28 @@ public class CommandSpeed {
     private static void doSpeed(ServerPlayerEntity player, int speed, ServerPlayerEntity target) {
         if (target.abilities.isFlying) {
             if (speed > ConfigValues.speed_max_fly) {
-                player.sendMessage(TextUtils.translateFromJson("speed.maessentials.max_fly", ConfigValues.speed_max_fly));
+                player.sendMessage(Utils.translateFromJson("speed.maessentials.max_fly", ConfigValues.speed_max_fly));
             } else {
                 float flySpeed = speed * flySpeedDefault;
                 player.setAIMoveSpeed(flySpeed);
                 if (player == target) {
-                    player.sendMessage(TextUtils.translateFromJson("speed.maessentials.fly.self", speed));
+                    player.sendMessage(Utils.translateFromJson("speed.maessentials.fly.self", speed));
                 } else {
-                    player.sendMessage(TextUtils.translateFromJson("speed.maessentials.fly.other", target.getDisplayName().getFormattedText(), speed));
-                    target.sendMessage(TextUtils.translateFromJson("speed.maessentials.fly.self", speed));
+                    player.sendMessage(Utils.translateFromJson("speed.maessentials.fly.other", target.getDisplayName().getFormattedText(), speed));
+                    target.sendMessage(Utils.translateFromJson("speed.maessentials.fly.self", speed));
                 }
             }
         } else {
             if (speed > ConfigValues.speed_max_walk) {
-                player.sendMessage(TextUtils.translateFromJson("speed.maessentials.max_walk", ConfigValues.speed_max_fly));
+                player.sendMessage(Utils.translateFromJson("speed.maessentials.max_walk", ConfigValues.speed_max_fly));
             } else {
                 float walkSpeed = speed * walkSpeedDefault;
                 player.setAIMoveSpeed(walkSpeed);
                 if (player == target) {
-                    player.sendMessage(TextUtils.translateFromJson("speed.maessentials.walk.self", speed));
+                    player.sendMessage(Utils.translateFromJson("speed.maessentials.walk.self", speed));
                 } else {
-                    player.sendMessage(TextUtils.translateFromJson("speed.maessentials.walk.other", target.getDisplayName().getFormattedText(), speed));
-                    target.sendMessage(TextUtils.translateFromJson("speed.maessentials.walk.self", speed));
+                    player.sendMessage(Utils.translateFromJson("speed.maessentials.walk.other", target.getDisplayName().getFormattedText(), speed));
+                    target.sendMessage(Utils.translateFromJson("speed.maessentials.walk.self", speed));
                 }
             }
         }

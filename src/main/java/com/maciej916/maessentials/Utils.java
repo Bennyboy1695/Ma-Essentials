@@ -1,21 +1,25 @@
 package com.maciej916.maessentials;
 
-import com.google.common.base.Utf8;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
+import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.server.permission.PermissionAPI;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Predicate;
 
-public class TextUtils {
+public class Utils {
 
     public static ITextComponent convertToITextComponent(Component component) {
         return ITextComponent.Serializer.fromJson(GsonComponentSerializer.INSTANCE.serialize(component));
@@ -40,5 +44,15 @@ public class TextUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Predicate<CommandSource> hasPermission(String permission) {
+        return source -> {
+            if (source.getEntity() != null) {
+                return PermissionAPI.hasPermission((ServerPlayerEntity) source.getEntity(), permission);
+            } else {
+                return source.hasPermissionLevel(1);
+            }
+        };
     }
 }

@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,7 +16,7 @@ import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 public class CommandTrash {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("trash").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("trash").requires(Utils.hasPermission(PermissionStrings.COMMAND.TRASH));
         builder.executes(context -> trash(context));
         dispatcher.register(builder);
     }
@@ -26,7 +26,7 @@ public class CommandTrash {
 
         player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {
             return ChestContainer.createGeneric9X4(id, inv);
-        }, TextUtils.translateFromJson("trash.maessentials.open")));
+        }, Utils.translateFromJson("trash.maessentials.open")));
 
         return Command.SINGLE_SUCCESS;
     }

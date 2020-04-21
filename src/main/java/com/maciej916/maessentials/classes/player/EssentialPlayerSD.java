@@ -17,11 +17,12 @@ public class EssentialPlayerSD implements JsonDeserializer<EssentialPlayer>, Jso
 
         UUID uuid = new Gson().fromJson(object.get("uuid"), UUID.class);
         String username = new Gson().fromJson(object.get("username"), String.class);
+        boolean needingSpawnMove = new Gson().fromJson(object.get("needingSpawnMove"), Boolean.class);
         PlayerData data = new Gson().fromJson(object.get("data"), PlayerData.class);
         PlayerUsage last_usage = new Gson().fromJson(object.get("last_usage"), PlayerUsage.class);
         PlayerRestrictions restrictions = new Gson().fromJson(object.get("restrictions"), PlayerRestrictions.class);
         Storage custom_data = new Gson().fromJson(getJsonObject(object.get("custom_data")), Storage.class);
-        EssentialPlayer eslPlayer = new EssentialPlayer(uuid, username, data, restrictions, last_usage, custom_data);
+        EssentialPlayer eslPlayer = new EssentialPlayer(uuid, username, needingSpawnMove, data, restrictions, last_usage, custom_data);
         return eslPlayer;
     }
 
@@ -31,6 +32,7 @@ public class EssentialPlayerSD implements JsonDeserializer<EssentialPlayer>, Jso
 
         object.add("uuid", getJsonElement(src.getPlayerUUID().toString()));
         object.add("username", getJsonElement(src.getUsername()));
+        object.add("needingSpawnMove", getJsonElement(src.isNeedingSpawnMove()));
         object.add("data", getJsonElement(src.getData()));
         object.add("last_usage", getJsonElement(src.getUsage()));
         object.add("restrictions", getJsonElement(src.getRestrictions()));

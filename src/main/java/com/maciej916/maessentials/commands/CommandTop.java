@@ -1,8 +1,8 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
-import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -20,7 +20,7 @@ import net.minecraft.world.server.ServerWorld;
 public class CommandTop {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("top").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("top").requires(Utils.hasPermission(PermissionStrings.COMMAND.TOP));
         builder.executes(context -> top(context));
         dispatcher.register(builder);
     }
@@ -46,7 +46,7 @@ public class CommandTop {
                     if (chunk.getBlockState(headPos).getMaterial().equals(Material.AIR)) {
                         Location topLocation = new Location(player.getPosX(), y-1, player.getPosZ(), player.rotationYaw, player.rotationPitch, player.dimension.getId());
                         Teleport.doTeleport(player, topLocation, true, true);
-                        player.sendMessage(TextUtils.translateFromJson("top.maessentials.teleported"));
+                        player.sendMessage(Utils.translateFromJson("top.maessentials.teleported"));
                         break;
                     }
                 }

@@ -1,6 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
@@ -15,7 +16,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class CommandDelWarp {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("delwarp").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("delwarp").requires(Utils.hasPermission(PermissionStrings.COMMAND.WARP_DELETE));
         builder
                 .executes(context -> warp(context))
                         .then(Commands.argument("warpName", StringArgumentType.string())
@@ -26,7 +27,7 @@ public class CommandDelWarp {
 
     private static int warp(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("warp.maessentials.specify_name"));
+        player.sendMessage(Utils.translateFromJson("warp.maessentials.specify_name"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -35,9 +36,9 @@ public class CommandDelWarp {
         String warpName = StringArgumentType.getString(context, "warpName").toLowerCase();
 
         if (DataManager.getWarp().delWarp(warpName)) {
-            player.sendMessage(TextUtils.translateFromJson("delwarp.maessentials.success", warpName));
+            player.sendMessage(Utils.translateFromJson("delwarp.maessentials.success", warpName));
         } else {
-            player.sendMessage(TextUtils.translateFromJson("warp.maessentials.not_exist", warpName));
+            player.sendMessage(Utils.translateFromJson("warp.maessentials.not_exist", warpName));
         }
 
         return Command.SINGLE_SUCCESS;

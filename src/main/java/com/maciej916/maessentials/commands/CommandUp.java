@@ -1,8 +1,8 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
-import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -21,7 +21,7 @@ import net.minecraft.world.server.ServerWorld;
 public class CommandUp {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("up").requires((source) -> source.hasPermissionLevel(2))
+        dispatcher.register(Commands.literal("up").requires(Utils.hasPermission(PermissionStrings.COMMAND.UP))
                 .executes((context) -> up(context.getSource()))
                 .then(Commands.argument("number", IntegerArgumentType.integer()).executes((context) -> up(context.getSource(), IntegerArgumentType.getInteger(context, "number"))))
         );
@@ -29,7 +29,7 @@ public class CommandUp {
 
     private static int up(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.location"));
+        player.sendMessage(Utils.translateFromJson("maessentials.provide.location"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -60,13 +60,13 @@ public class CommandUp {
 
         if (tp) {
             if (number > 0) {
-                player.sendMessage(TextUtils.translateFromJson("up.maessentials.success.up", number));
+                player.sendMessage(Utils.translateFromJson("up.maessentials.success.up", number));
             } else {
                 number = number * -1;
-                player.sendMessage(TextUtils.translateFromJson("up.maessentials.success.down", number));
+                player.sendMessage(Utils.translateFromJson("up.maessentials.success.down", number));
             }
         } else {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.invalid.location"));
+            player.sendMessage(Utils.translateFromJson("maessentials.invalid.location"));
         }
 
         return Command.SINGLE_SUCCESS;

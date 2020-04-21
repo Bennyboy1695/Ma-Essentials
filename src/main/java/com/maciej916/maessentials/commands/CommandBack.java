@@ -1,11 +1,11 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -19,7 +19,7 @@ import static com.maciej916.maessentials.libs.Methods.simpleTeleport;
 public class CommandBack {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("back").requires((source) -> source.hasPermissionLevel(0))
+        dispatcher.register(Commands.literal("back").requires(Utils.hasPermission(PermissionStrings.COMMAND.BACK))
                 .executes((context) -> back(context.getSource()))
         );
     }
@@ -30,7 +30,7 @@ public class CommandBack {
 
         Location location = eslPlayer.getData().getLastLocation();
         if (location == null) {
-            player.sendMessage(TextUtils.translateFromJson("back.maessentials.not_found"));
+            player.sendMessage(Utils.translateFromJson("back.maessentials.not_found"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -40,13 +40,13 @@ public class CommandBack {
         if (ConfigValues.back_death_custom_cooldown != 0 && recentlyDied) {
             long cooldown = eslPlayer.getUsage().getTeleportCooldown("back", ConfigValues.back_death_custom_cooldown);
             if (cooldown != 0) {
-                player.sendMessage(TextUtils.translateFromJson("back.maessentials.cooldown.teleport", cooldown));
+                player.sendMessage(Utils.translateFromJson("back.maessentials.cooldown.teleport", cooldown));
                 return Command.SINGLE_SUCCESS;
             }
         } else {
             long cooldown = eslPlayer.getUsage().getTeleportCooldown("back", ConfigValues.back_cooldown);
             if (cooldown != 0) {
-                player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
+                player.sendMessage(Utils.translateFromJson("maessentials.cooldown.teleport", cooldown));
                 return Command.SINGLE_SUCCESS;
             }
         }
@@ -56,9 +56,9 @@ public class CommandBack {
 
         if (simpleTeleport(player, location, "back", ConfigValues.back_delay)) {
             if (ConfigValues.back_delay == 0) {
-                player.sendMessage(TextUtils.translateFromJson("back.maessentials.success"));
+                player.sendMessage(Utils.translateFromJson("back.maessentials.success"));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("back.maessentials.success.wait", ConfigValues.back_delay));
+                player.sendMessage(Utils.translateFromJson("back.maessentials.success.wait", ConfigValues.back_delay));
             }
         }
 

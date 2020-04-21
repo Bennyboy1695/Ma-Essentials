@@ -1,11 +1,11 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -27,10 +27,10 @@ import static com.maciej916.maessentials.libs.Methods.simpleTeleport;
 public class CommandRndtp {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("rndtp").requires((source) -> source.hasPermissionLevel(0))
+        dispatcher.register(Commands.literal("rndtp").requires(Utils.hasPermission(PermissionStrings.COMMAND.RANDOMTP))
                 .executes((context) -> rndtp(context.getSource()))
         );
-        dispatcher.register(Commands.literal("rtp").requires((source) -> source.hasPermissionLevel(0))
+        dispatcher.register(Commands.literal("rtp").requires(Utils.hasPermission(PermissionStrings.COMMAND.RANDOMTP))
                 .executes((context) -> rndtp(context.getSource()))
         );
     }
@@ -42,19 +42,19 @@ public class CommandRndtp {
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("rndtp", ConfigValues.rndtp_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
         Location spawnLocation = DataManager.getWorld().getSpawn();
         if (spawnLocation.getDimensionID() != player.dimension.getId()) {
-            player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.dimension"));
+            player.sendMessage(Utils.translateFromJson("rndtp.maessentials.dimension"));
             return Command.SINGLE_SUCCESS;
         }
 
         Location location = findRandomTp(world, spawnLocation, player, 0);
         if (location == null) {
-            player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.not_found"));
+            player.sendMessage(Utils.translateFromJson("rndtp.maessentials.not_found"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -62,9 +62,9 @@ public class CommandRndtp {
         eslPlayer.saveData();
         if (simpleTeleport(player, location, "rndtp", ConfigValues.rndtp_delay)) {
             if (ConfigValues.rndtp_delay == 0) {
-                player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.teleport"));
+                player.sendMessage(Utils.translateFromJson("rndtp.maessentials.teleport"));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.teleport.wait", ConfigValues.rndtp_delay));
+                player.sendMessage(Utils.translateFromJson("rndtp.maessentials.teleport.wait", ConfigValues.rndtp_delay));
             }
         }
 

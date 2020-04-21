@@ -1,11 +1,11 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class CommandSetHome {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sethome").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("sethome").requires(Utils.hasPermission(PermissionStrings.COMMAND.HOME_SET));
         builder
                 .executes(context -> setHome(context))
                         .then(Commands.argument("homeName", StringArgumentType.string())
@@ -50,9 +50,9 @@ public class CommandSetHome {
         if ((eslPlayer.getHomeData().getHomes().size() < homes_limit)  || (eslPlayer.getHomeData().getHomes().size() == homes_limit && eslPlayer.getHomeData().getHome(name) != null)) {
             eslPlayer.getHomeData().setHome(name, new Location(player));
             eslPlayer.saveHomes();
-            player.sendMessage(TextUtils.translateFromJson("sethome.maessentials.done", name));
+            player.sendMessage(Utils.translateFromJson("sethome.maessentials.done", name));
         } else {
-            player.sendMessage(TextUtils.translateFromJson("sethome.maessentials.max_homes", homes_limit));
+            player.sendMessage(Utils.translateFromJson("sethome.maessentials.max_homes", homes_limit));
        }
     }
 }

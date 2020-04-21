@@ -1,10 +1,10 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.world.WorldData;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -17,7 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 public class CommandSetSpawn {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("setspawn").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("setspawn").requires(Utils.hasPermission(PermissionStrings.COMMAND.SPAWN_SET));
         builder.executes(context -> setSpawn(context));
         dispatcher.register(builder);
     }
@@ -29,7 +29,7 @@ public class CommandSetSpawn {
         worldData.setSpawn(new Location(player));
         worldData.saveData();
 
-        player.sendMessage(TextUtils.translateFromJson("setspawn.maessentials.success"));
+        player.sendMessage(Utils.translateFromJson("setspawn.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }

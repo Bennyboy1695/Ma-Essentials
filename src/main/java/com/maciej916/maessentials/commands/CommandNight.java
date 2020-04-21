@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,7 +15,7 @@ import net.minecraft.world.server.ServerWorld;
 public class CommandNight {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("night").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("night").requires(Utils.hasPermission(PermissionStrings.COMMAND.NIGHT));
         builder.executes(context -> night(context));
         dispatcher.register(builder);
     }
@@ -27,7 +27,7 @@ public class CommandNight {
             serverworld.setDayTime(20000);
         }
 
-        player.sendMessage(TextUtils.translateFromJson("night.maessentials.success"));
+        player.sendMessage(Utils.translateFromJson("night.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }

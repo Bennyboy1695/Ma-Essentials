@@ -1,6 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
@@ -16,7 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class CommandDelHome {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("delhome").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("delhome").requires(Utils.hasPermission(PermissionStrings.COMMAND.HOME_DELETE));
         builder
                 .executes(context -> delHome(context))
                     .then(Commands.argument("homeName", StringArgumentType.string())
@@ -27,7 +28,7 @@ public class CommandDelHome {
 
     private static int delHome(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("delhome.maessentials.specify_name"));
+        player.sendMessage(Utils.translateFromJson("delhome.maessentials.specify_name"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -37,13 +38,13 @@ public class CommandDelHome {
         String name = StringArgumentType.getString(context, "homeName").toLowerCase();
 
         if (eslPlayer.getHomeData().getHome(name) == null) {
-            player.sendMessage(TextUtils.translateFromJson("home.maessentials.not_exist", name));
+            player.sendMessage(Utils.translateFromJson("home.maessentials.not_exist", name));
             return Command.SINGLE_SUCCESS;
         }
 
         eslPlayer.getHomeData().delHome(name);
         eslPlayer.saveHomes();
-        player.sendMessage(TextUtils.translateFromJson("delhome.maessentials.done", name));
+        player.sendMessage(Utils.translateFromJson("delhome.maessentials.done", name));
 
         return Command.SINGLE_SUCCESS;
     }

@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,7 +16,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 public class CommandKickall {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("kickall").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("kickall").requires(Utils.hasPermission(PermissionStrings.COMMAND.KICK_ALL));
         builder
                 .executes(context -> kickall(context))
                         .then(Commands.argument("reason", MessageArgument.message())
@@ -43,6 +43,6 @@ public class CommandKickall {
                 tp.connection.disconnect(new StringTextComponent(reason));
             }
         }
-        player.sendMessage(TextUtils.translateFromJson("kickall.maessentials.success"));
+        player.sendMessage(Utils.translateFromJson("kickall.maessentials.success"));
     }
 }

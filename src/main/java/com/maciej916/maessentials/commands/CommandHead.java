@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -19,7 +19,7 @@ import net.minecraft.util.SoundEvents;
 
 public class CommandHead {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("head").requires((source) -> source.hasPermissionLevel(2))
+        dispatcher.register(Commands.literal("head").requires(Utils.hasPermission(PermissionStrings.COMMAND.HEAD))
             .then(Commands.argument("targetPlayer", StringArgumentType.word()).executes((context) -> head(context.getSource(), StringArgumentType.getString(context, "targetPlayer")))
                 .then(Commands.argument("amount", IntegerArgumentType.integer()).executes((context) -> head(context.getSource(), StringArgumentType.getString(context, "targetPlayer"), IntegerArgumentType.getInteger(context, "amount"))))
             )
@@ -43,7 +43,7 @@ public class CommandHead {
         CompoundNBT compound = stack.getOrCreateTag();
         compound.putString("SkullOwner", targetPlayer);
 
-        player.sendMessage(TextUtils.translateFromJson("head.maessentials.done", targetPlayer));
+        player.sendMessage(Utils.translateFromJson("head.maessentials.done", targetPlayer));
         player.inventory.addItemStackToInventory(stack);
         player.world.playSound((PlayerEntity)null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
     }

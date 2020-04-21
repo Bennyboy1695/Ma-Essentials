@@ -1,9 +1,9 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.data.DataLoader;
 import com.maciej916.maessentials.libs.Log;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,7 +16,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 public class CommandMaeReload {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("maereload").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("maereload").requires(Utils.hasPermission(PermissionStrings.COMMAND.MAERELOAD));
         builder.executes(context -> reload(context));
         dispatcher.register(builder);
     }
@@ -25,7 +25,7 @@ public class CommandMaeReload {
         ServerPlayerEntity player = context.getSource().asPlayer();
         Log.log("Call DataLoader");
         DataLoader.load();
-        player.sendMessage(TextUtils.translateFromJson("maereload.maessentials.done"));
+        player.sendMessage(Utils.translateFromJson("maereload.maessentials.done"));
         return Command.SINGLE_SUCCESS;
     }
 }

@@ -33,6 +33,9 @@
 
   "_comment": "Spawn",
   "spawn.maessentials.success": "Teleporting to spawn...",
+  "spawn.other.maessentials.success": "You have been moved to spawn!",
+  "spawn.other.online.maessentials.success": "§2%s has been moved to spawn.",
+  "spawn.other.offline.maessentials.success": "§2%s will be moved to spawn when they next login.",
   "spawn.maessentials.success.wait": "Teleporting to spawn, please wait §c%s§r seconds...",
 
   "setspawn.maessentials.success": "Spawn location set",
@@ -258,5 +261,6 @@
   "invsee.maessentials.self": "§cYou can not invsee your own inventory",
 
 
-  "test.maessentials.test": "%s"
+  "test.maessentials.test": "%s",
+  "player.not.found.maessentials": "§c%s could not be found!"
 }

@@ -1,10 +1,10 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -22,13 +22,13 @@ import net.minecraft.world.server.ServerWorld;
 public class CommandSuicide {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         if (ConfigValues.suicide_enable_player) {
-            LiteralArgumentBuilder<CommandSource> builder = Commands.literal("suicide").requires(source -> source.hasPermissionLevel(0));
+            LiteralArgumentBuilder<CommandSource> builder = Commands.literal("suicide").requires(Utils.hasPermission(PermissionStrings.COMMAND.SUICIDE));
             builder
                     .executes(context -> suicide(context));
             dispatcher.register(builder);
         }
 
-        LiteralArgumentBuilder<CommandSource> builder2 = Commands.literal("suicide").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder2 = Commands.literal("suicide").requires(Utils.hasPermission(PermissionStrings.COMMAND.SUICIDE_OTHERS));
         builder2
                 .then(Commands.argument("targetPlayer", EntityArgument.players())
                         .executes(context -> suicideArgs(context)));
@@ -41,7 +41,7 @@ public class CommandSuicide {
 
         long cooldown = eslPlayer.getUsage().getCommandCooldown("suicide", ConfigValues.suicide_player_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -62,9 +62,9 @@ public class CommandSuicide {
     private static void doSuicide(ServerPlayerEntity player, ServerPlayerEntity target) {
         if (target.interactionManager.getGameType() == GameType.CREATIVE || target.interactionManager.getGameType() == GameType.SPECTATOR) {
             if (player == target) {
-                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode"));
+                target.sendMessage(Utils.translateFromJson("maessentials.invaild_gamemode"));
             } else {
-                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
+                target.sendMessage(Utils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
             }
             return;
         }
@@ -76,8 +76,8 @@ public class CommandSuicide {
         world.addLightningBolt(entity);
 
         if (player != target) {
-            player.sendMessage(TextUtils.translateFromJson("suicide.maessentials.player", target.getDisplayName().getFormattedText()));
-            target.sendMessage(TextUtils.translateFromJson("suicide.maessentials.player.target", player.getDisplayName().getFormattedText()));
+            player.sendMessage(Utils.translateFromJson("suicide.maessentials.player", target.getDisplayName().getFormattedText()));
+            target.sendMessage(Utils.translateFromJson("suicide.maessentials.player.target", player.getDisplayName().getFormattedText()));
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
-import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -17,7 +17,7 @@ import static com.maciej916.maessentials.libs.Methods.currentTimestamp;
 
 public class CommandUnban {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        dispatcher.register(Commands.literal("unban").requires((source) -> source.hasPermissionLevel(2))
+        dispatcher.register(Commands.literal("unban").requires(Utils.hasPermission(PermissionStrings.COMMAND.UNBAN))
                 .executes((context) -> unban(context.getSource()))
                 .then(Commands.argument("targetPlayer", StringArgumentType.word()).executes((context) -> unban(context.getSource(), StringArgumentType.getString(context, "targetPlayer"))))
         );
@@ -25,7 +25,7 @@ public class CommandUnban {
 
     private static int unban(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
-        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
+        player.sendMessage(Utils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -34,16 +34,16 @@ public class CommandUnban {
         EssentialPlayer eslTargetPlayer = DataManager.getPlayer(targetPlayer);
 
         if (eslTargetPlayer == null) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.not_found.player", targetPlayer));
+            player.sendMessage(Utils.translateFromJson("maessentials.not_found.player", targetPlayer));
         } else {
             PlayerRestriction ban = eslTargetPlayer.getRestrictions().getBan();
 
             if (ban == null || (currentTimestamp() > ban.getTime() && ban.getTime() != -1)) {
-                player.sendMessage(TextUtils.translateFromJson("unban.maessentials.not_banned", eslTargetPlayer.getUsername()));
+                player.sendMessage(Utils.translateFromJson("unban.maessentials.not_banned", eslTargetPlayer.getUsername()));
             } else {
                 eslTargetPlayer.getRestrictions().unBan();
                 eslTargetPlayer.saveData();
-                player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("unban.maessentials.success", eslTargetPlayer.getUsername()));
+                player.server.getPlayerList().sendMessage(Utils.translateFromJson("unban.maessentials.success", eslTargetPlayer.getUsername()));
             }
         }
 

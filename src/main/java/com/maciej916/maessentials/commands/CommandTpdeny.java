@@ -1,8 +1,8 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.teleport.TeleportRequest;
-import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -13,13 +13,12 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 
 public class CommandTpdeny {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("tpdeny").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("tpdeny").requires(Utils.hasPermission(PermissionStrings.COMMAND.TPA_DENY));
         builder
                 .executes(context -> tpdeny(context))
                         .then(Commands.argument("targetPlayer", EntityArgument.players())
@@ -33,9 +32,9 @@ public class CommandTpdeny {
         if (requests.size() == 1) {
             Teleport.declineRequest(requests.get(0));
         } else if (requests.size() > 1) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.specify.player"));
+            player.sendMessage(Utils.translateFromJson("maessentials.specify.player"));
         } else {
-            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.no_request"));
+            player.sendMessage(Utils.translateFromJson("tpa.maessentials.no_request"));
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -47,7 +46,7 @@ public class CommandTpdeny {
         if (tpR != null) {
             Teleport.declineRequest(tpR);
         } else {
-            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.not_found"));
+            player.sendMessage(Utils.translateFromJson("tpa.maessentials.not_found"));
         }
         return Command.SINGLE_SUCCESS;
     }

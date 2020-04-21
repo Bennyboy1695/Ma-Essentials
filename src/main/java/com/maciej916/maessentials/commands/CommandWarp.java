@@ -1,12 +1,12 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
-import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -27,7 +27,7 @@ import static com.maciej916.maessentials.libs.Methods.simpleTeleport;
 
 public class CommandWarp {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("warp").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("warp").requires(Utils.hasPermission(PermissionStrings.COMMAND.WARP));
         builder
                 .executes(context -> warp(context))
                         .then(Commands.argument("warpName", StringArgumentType.string())
@@ -35,7 +35,7 @@ public class CommandWarp {
                                 .executes(context -> warpArgs(context)));
         dispatcher.register(builder);
 
-        LiteralArgumentBuilder<CommandSource> builder2 = Commands.literal("warps").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder2 = Commands.literal("warps").requires(Utils.hasPermission(PermissionStrings.COMMAND.WARP_LIST));
         builder2.executes(context -> warp(context));
         dispatcher.register(builder2);
     }
@@ -44,14 +44,14 @@ public class CommandWarp {
         ServerPlayerEntity player = context.getSource().asPlayer();
 
         Set<String> warps = DataManager.getWarp().getWarps().keySet();
-        TextComponent warpList = (TextComponent) TextUtils.translateFromJson("warp.maessentials.list", warps.size());
+        TextComponent warpList = (TextComponent) Utils.translateFromJson("warp.maessentials.list", warps.size());
         if (warps.size() != 0) {
             int i = 1;
             for (String name : warps) {
                 ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/warp " + name);
-                HoverEvent eventHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("warp.maessentials.list.warp", "/warp " + name));
+                HoverEvent eventHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Utils.translateFromJson("warp.maessentials.list.warp", "/warp " + name));
 
-                TextComponent kit = (TextComponent) TextUtils.translateFromJson("warp.maessentials.list.warp", name);
+                TextComponent kit = (TextComponent) Utils.translateFromJson("warp.maessentials.list.warp", name);
                 kit.getStyle().setClickEvent(clickEvent);
                 kit.getStyle().setHoverEvent(eventHover);
 
@@ -81,13 +81,13 @@ public class CommandWarp {
 
         Location location = DataManager.getWarp().getWarp(name);
         if (location == null) {
-            player.sendMessage(TextUtils.translateFromJson("warp.maessentials.not_exist", name));
+            player.sendMessage(Utils.translateFromJson("warp.maessentials.not_exist", name));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("warp", ConfigValues.warps_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return;
         }
 
@@ -96,9 +96,9 @@ public class CommandWarp {
 
         if (simpleTeleport(player, location, "warp", ConfigValues.warps_delay)) {
             if (ConfigValues.warps_delay == 0) {
-                player.sendMessage(TextUtils.translateFromJson("warp.maessentials.success", name));
+                player.sendMessage(Utils.translateFromJson("warp.maessentials.success", name));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("warp.maessentials.success.wait", name, ConfigValues.warps_delay));
+                player.sendMessage(Utils.translateFromJson("warp.maessentials.success.wait", name, ConfigValues.warps_delay));
             }
         }
     }

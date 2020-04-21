@@ -12,6 +12,7 @@ import java.util.UUID;
 public class EssentialPlayer {
     private UUID playerUUID;
     private String username;
+    private boolean needingSpawnMove;
     private HomeData home_data = new HomeData();
 
     private PlayerData data = new PlayerData();
@@ -27,6 +28,14 @@ public class EssentialPlayer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setNeedingSpawnMove(boolean needingSpawnMove) {
+        this.needingSpawnMove = needingSpawnMove;
+    }
+
+    public boolean isNeedingSpawnMove() {
+        return needingSpawnMove;
     }
 
     public UUID getPlayerUUID() {
@@ -65,9 +74,10 @@ public class EssentialPlayer {
         this.playerUUID = playerUUID;
     }
 
-    public EssentialPlayer (UUID playerUUID, String username, PlayerData data, PlayerRestrictions restrictions, PlayerUsage last_usage, Storage custom_data) {
+    public EssentialPlayer (UUID playerUUID, String username, boolean needingSpawnMove, PlayerData data, PlayerRestrictions restrictions, PlayerUsage last_usage, Storage custom_data) {
         this.playerUUID = playerUUID;
         this.username = username;
+        this.needingSpawnMove = needingSpawnMove;
         this.data = data;
         this.restrictions = restrictions;
         this.last_usage = last_usage;

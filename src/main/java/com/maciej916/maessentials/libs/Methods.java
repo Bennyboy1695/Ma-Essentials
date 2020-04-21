@@ -1,7 +1,7 @@
 
 package com.maciej916.maessentials.libs;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.kit.Kit;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
@@ -31,6 +31,8 @@ import static com.maciej916.maessentials.libs.Teleport.*;
 public class Methods {
 
     public static final SuggestionProvider<CommandSource> HOME_SUGGEST = (context, builder) -> ISuggestionProvider.suggest(DataManager.getPlayer(context.getSource().asPlayer()).getHomeData().getHomes().keySet().toArray(new String[0]), builder);
+
+    public static final SuggestionProvider<CommandSource> PLAYERS_SUGGEST = (context, builder) -> ISuggestionProvider.suggest(DataManager.getPlayers().values().stream().map(EssentialPlayer::getUsername), builder);
 
     public static final SuggestionProvider<CommandSource> WARP_SUGGEST = (context, builder) -> ISuggestionProvider.suggest(DataManager.getWarp().getWarps().keySet().toArray(new String[0]), builder);
 
@@ -85,7 +87,7 @@ public class Methods {
             }
             return true;
         } catch (Exception e) {
-            player.sendMessage(TextUtils.translateFromJson("kit.maessentials.parse_error"));
+            player.sendMessage(Utils.translateFromJson("kit.maessentials.parse_error"));
             return false;
         }
     }
@@ -94,12 +96,12 @@ public class Methods {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getTemp().isTeleportActive()) {
-            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.active"));
+            player.sendMessage(Utils.translateFromJson("teleport.maessentials.active"));
             return false;
         }
 
         if (delay == 0) {
-            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.teleported"));
+            player.sendMessage(Utils.translateFromJson("teleport.maessentials.teleported"));
             doTeleport(player, location, true, true);
             return true;
         }
@@ -114,13 +116,13 @@ public class Methods {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getTemp().isTeleportActive()) {
-            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.active"));
+            player.sendMessage(Utils.translateFromJson("teleport.maessentials.active"));
             return false;
         }
 
         TeleportRequest existTpR = Teleport.findRequest(creator, player, target);
         if (existTpR != null) {
-            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.exist", target.getDisplayName().getFormattedText()));
+            player.sendMessage(Utils.translateFromJson("tpa.maessentials.exist", target.getDisplayName().getFormattedText()));
             return false;
         }
 

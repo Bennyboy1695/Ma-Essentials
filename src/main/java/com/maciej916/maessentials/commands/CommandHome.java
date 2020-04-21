@@ -1,12 +1,12 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
-import com.maciej916.maessentials.libs.Teleport;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -21,7 +21,7 @@ import static com.maciej916.maessentials.libs.Methods.simpleTeleport;
 
 public class CommandHome {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("home").requires(source -> source.hasPermissionLevel(0));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("home").requires(Utils.hasPermission(PermissionStrings.COMMAND.HOME));
         builder
                 .executes(context -> home(context))
                 .then(Commands.argument("homeName", StringArgumentType.string())
@@ -47,19 +47,19 @@ public class CommandHome {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getHomeData().getHomes().size() == 0) {
-            player.sendMessage(TextUtils.translateFromJson("home.maessentials.no_homes"));
+            player.sendMessage(Utils.translateFromJson("home.maessentials.no_homes"));
             return;
         }
 
         Location location = eslPlayer.getHomeData().getHome(name);
         if (location == null) {
-            player.sendMessage(TextUtils.translateFromJson("home.maessentials.not_exist", name));
+            player.sendMessage(Utils.translateFromJson("home.maessentials.not_exist", name));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("home", ConfigValues.homes_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(Utils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return;
         }
 
@@ -68,9 +68,9 @@ public class CommandHome {
 
         if (simpleTeleport(player, location, "home", ConfigValues.homes_delay)) {
             if (ConfigValues.homes_delay == 0) {
-                player.sendMessage(TextUtils.translateFromJson("home.maessentials.teleport", name));
+                player.sendMessage(Utils.translateFromJson("home.maessentials.teleport", name));
             } else {
-                player.sendMessage(TextUtils.translateFromJson("home.maessentials.teleport.wait", name, ConfigValues.homes_delay));
+                player.sendMessage(Utils.translateFromJson("home.maessentials.teleport.wait", name, ConfigValues.homes_delay));
             }
         }
     }

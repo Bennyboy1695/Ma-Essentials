@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.TextUtils;
-import com.maciej916.maessentials.libs.Methods;
+import com.maciej916.maessentials.PermissionStrings;
+import com.maciej916.maessentials.Utils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -10,14 +10,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldInfo;
 
 public class CommandRain {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("rain").requires(source -> source.hasPermissionLevel(2));
+        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("rain").requires(Utils.hasPermission(PermissionStrings.COMMAND.RAIN));
         builder.executes(context -> rain(context));
         dispatcher.register(builder);
     }
@@ -33,7 +32,7 @@ public class CommandRain {
             worldData.setRainTime(6000);
         }
 
-        player.sendMessage(TextUtils.translateFromJson("rain.maessentials.success"));
+        player.sendMessage(Utils.translateFromJson("rain.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }
