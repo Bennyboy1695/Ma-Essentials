@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -25,14 +26,14 @@ public class CommandBroadcast {
 
     private static int broadcast(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("broadcast.maessentials.no_message"));
+        player.sendMessage(TextUtils.translateFromJson("broadcast.maessentials.no_message"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int broadcastArgs(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
         ITextComponent reason = MessageArgument.getMessage(context, "message");
-        player.server.getPlayerList().sendMessage(Methods.formatText("broadcast.maessentials.success", reason));
+        player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("broadcast.maessentials.success", reason));
         return Command.SINGLE_SUCCESS;
     }
 }

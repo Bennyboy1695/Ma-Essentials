@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -29,6 +30,9 @@ public class CommandRndtp {
         dispatcher.register(Commands.literal("rndtp").requires((source) -> source.hasPermissionLevel(0))
                 .executes((context) -> rndtp(context.getSource()))
         );
+        dispatcher.register(Commands.literal("rtp").requires((source) -> source.hasPermissionLevel(0))
+                .executes((context) -> rndtp(context.getSource()))
+        );
     }
 
     private static int rndtp(CommandSource source) throws CommandSyntaxException {
@@ -38,19 +42,19 @@ public class CommandRndtp {
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("rndtp", ConfigValues.rndtp_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(Methods.formatText("maessentials.cooldown", cooldown));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
         Location spawnLocation = DataManager.getWorld().getSpawn();
         if (spawnLocation.getDimensionID() != player.dimension.getId()) {
-            player.sendMessage(Methods.formatText("rndtp.maessentials.dimension"));
+            player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.dimension"));
             return Command.SINGLE_SUCCESS;
         }
 
         Location location = findRandomTp(world, spawnLocation, player, 0);
         if (location == null) {
-            player.sendMessage(Methods.formatText("rndtp.maessentials.not_found"));
+            player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.not_found"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -58,9 +62,9 @@ public class CommandRndtp {
         eslPlayer.saveData();
         if (simpleTeleport(player, location, "rndtp", ConfigValues.rndtp_delay)) {
             if (ConfigValues.rndtp_delay == 0) {
-                player.sendMessage(Methods.formatText("rndtp.maessentials.teleport"));
+                player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.teleport"));
             } else {
-                player.sendMessage(Methods.formatText("rndtp.maessentials.teleport.wait", ConfigValues.rndtp_delay));
+                player.sendMessage(TextUtils.translateFromJson("rndtp.maessentials.teleport.wait", ConfigValues.rndtp_delay));
             }
         }
 

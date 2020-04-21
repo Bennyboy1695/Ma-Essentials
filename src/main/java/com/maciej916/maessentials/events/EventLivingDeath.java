@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.events;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -17,7 +18,7 @@ public class EventLivingDeath {
         if (ConfigValues.back_death_enable) {
             if (event.getEntity() instanceof PlayerEntity) {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
-                player.sendMessage(Methods.formatText("back.maessentials.death"));
+                player.sendMessage(TextUtils.translateFromJson("back.maessentials.death"));
 
                 Location location = new Location(player);
                 location.y++;

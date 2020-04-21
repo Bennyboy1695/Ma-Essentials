@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
@@ -25,7 +26,7 @@ public class CommandDelWarp {
 
     private static int warp(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("warp.maessentials.specify_name"));
+        player.sendMessage(TextUtils.translateFromJson("warp.maessentials.specify_name"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -34,9 +35,9 @@ public class CommandDelWarp {
         String warpName = StringArgumentType.getString(context, "warpName").toLowerCase();
 
         if (DataManager.getWarp().delWarp(warpName)) {
-            player.sendMessage(Methods.formatText("delwarp.maessentials.success", warpName));
+            player.sendMessage(TextUtils.translateFromJson("delwarp.maessentials.success", warpName));
         } else {
-            player.sendMessage(Methods.formatText("warp.maessentials.not_exist", warpName));
+            player.sendMessage(TextUtils.translateFromJson("warp.maessentials.not_exist", warpName));
         }
 
         return Command.SINGLE_SUCCESS;

@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -46,19 +47,19 @@ public class CommandHome {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getHomeData().getHomes().size() == 0) {
-            player.sendMessage(Methods.formatText("home.maessentials.no_homes"));
+            player.sendMessage(TextUtils.translateFromJson("home.maessentials.no_homes"));
             return;
         }
 
         Location location = eslPlayer.getHomeData().getHome(name);
         if (location == null) {
-            player.sendMessage(Methods.formatText("home.maessentials.not_exist", name));
+            player.sendMessage(TextUtils.translateFromJson("home.maessentials.not_exist", name));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("home", ConfigValues.homes_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(Methods.formatText("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return;
         }
 
@@ -67,9 +68,9 @@ public class CommandHome {
 
         if (simpleTeleport(player, location, "home", ConfigValues.homes_delay)) {
             if (ConfigValues.homes_delay == 0) {
-                player.sendMessage(Methods.formatText("home.maessentials.teleport", name));
+                player.sendMessage(TextUtils.translateFromJson("home.maessentials.teleport", name));
             } else {
-                player.sendMessage(Methods.formatText("home.maessentials.teleport.wait", name, ConfigValues.homes_delay));
+                player.sendMessage(TextUtils.translateFromJson("home.maessentials.teleport.wait", name, ConfigValues.homes_delay));
             }
         }
     }

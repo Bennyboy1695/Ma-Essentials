@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.data.DataLoader;
 import com.maciej916.maessentials.libs.Log;
 import com.maciej916.maessentials.libs.Methods;
@@ -24,7 +25,7 @@ public class CommandMaeReload {
         ServerPlayerEntity player = context.getSource().asPlayer();
         Log.log("Call DataLoader");
         DataLoader.load();
-        player.sendMessage(Methods.formatText("maereload.maessentials.done"));
+        player.sendMessage(TextUtils.translateFromJson("maereload.maessentials.done"));
         return Command.SINGLE_SUCCESS;
     }
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +38,7 @@ public class DataLoader {
     public static void setupMain(FMLCommonSetupEvent event) {
         try {
             Log.log("Setup main");
-            ConfigValues.mainCatalog = System.getProperty("user.dir") + "/" + MaEssentials.MODID + "/";
+            ConfigValues.mainCatalog = MaEssentials.MODID + "/";
             Log.debug("Main catalog is: " + ConfigValues.mainCatalog);
 
             new File(ConfigValues.mainCatalog).mkdirs();

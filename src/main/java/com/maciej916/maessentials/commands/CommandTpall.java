@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
@@ -28,11 +29,11 @@ public class CommandTpall {
         for (ServerPlayerEntity tp : player.server.getPlayerList().getPlayers()) {
             if (player.getUniqueID() != tp.getUniqueID()) {
                 doTeleport(tp, location, true, true);
-                tp.sendMessage(Methods.formatText("tpall.maessentials.teleported", player.getDisplayName()));
+                tp.sendMessage(TextUtils.translateFromJson("tpall.maessentials.teleported", player.getDisplayName().getFormattedText()));
             }
         }
 
-        player.sendMessage(Methods.formatText("tpall.maessentials.success"));
+        player.sendMessage(TextUtils.translateFromJson("tpall.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }

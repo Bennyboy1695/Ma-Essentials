@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -39,13 +40,13 @@ public class CommandTempban {
 
     private static int tempban(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int tempbanPlayer(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("tempban.maessentials.provide.time"));
+        player.sendMessage(TextUtils.translateFromJson("tempban.maessentials.provide.time"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -76,12 +77,12 @@ public class CommandTempban {
         }
 
         if (banTime == 0) {
-            player.sendMessage(Methods.formatText("maessentials.illegal_date"));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.illegal_date"));
             return;
         }
 
         if (ban != null && (currentTimestamp() < ban.getTime() ||  ban.getTime() == -1)) {
-            player.sendMessage(Methods.formatText("tempban.maessentials.already_banned", target.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("tempban.maessentials.already_banned", target.getDisplayName().getFormattedText()));
             return;
         }
 
@@ -89,12 +90,12 @@ public class CommandTempban {
         eslTargetPlayer.saveData();
 
         if (banTime == -1) {
-            player.server.getPlayerList().sendMessage(Methods.formatText("tempban.maessentials.success.perm", target.getDisplayName(), player.getDisplayName(), reason));
-            target.connection.disconnect(Methods.formatText("tempban.maessentials.success.perm.target", player.getDisplayName(), reason));
+            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("tempban.maessentials.success.perm", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), reason));
+            target.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.perm.target", player.getDisplayName().getFormattedText(), reason));
         } else {
             String displayTime = Time.formatDate(banTime - currentTimestamp());
-            player.server.getPlayerList().sendMessage(Methods.formatText("tempban.maessentials.success", target.getDisplayName(), player.getDisplayName(), displayTime, reason));
-            target.connection.disconnect(Methods.formatText("tempban.maessentials.success.target", player.getDisplayName(), displayTime, reason));
+            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("tempban.maessentials.success", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), displayTime, reason));
+            target.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.target", player.getDisplayName().getFormattedText(), displayTime, reason));
         }
     }
 }

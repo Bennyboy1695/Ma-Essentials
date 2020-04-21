@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.events;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -19,12 +20,12 @@ public class EventServerChat {
         if (mute != null) {
             if (mute.getTime() == -1 || mute.getTime() > currentTimestamp()) {
                 if (mute.getTime() == -1) {
-                    player.sendMessage(Methods.formatText("mute.maessentials.success.perm.target"));
+                    player.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.perm.target"));
                 } else {
                     String displayTime = Time.formatDate(mute.getTime() - currentTimestamp());
-                    player.sendMessage(Methods.formatText("mute.maessentials.success.target", displayTime));
+                    player.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target", displayTime));
                 }
-                player.sendMessage(Methods.formatText("mute.maessentials.success.target.reason", mute.getReason()));
+                player.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target.reason", mute.getReason()));
                 event.setCanceled(true);
             }
         }

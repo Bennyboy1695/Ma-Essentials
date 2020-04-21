@@ -8,6 +8,11 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -86,29 +91,17 @@ minecraft {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:" + modMinecraftVersion + "-" + modForgeVersion
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    compile('net.kyori:text-api:3.0.2') {
+        exclude(module: 'checker-qual')
+    }
+    compile('net.kyori:text-serializer-gson:3.0.2') {
+        exclude(module: 'text-api')
+        exclude(module: 'gson')
+    }
+    compile('net.kyori:text-serializer-legacy:3.0.2') {
+        exclude(module: 'text-api')
+    }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -125,6 +118,22 @@ jar {
         ])
     }
 }
+
+shadowJar {
+    baseName = rootProject.name
+
+    dependencies {
+        include dependency('com.google.code.gson:gson')
+        include dependency('net.kyori:text-api')
+        include dependency('net.kyori:text-serializer-gson')
+        include dependency('net.kyori:text-serializer-legacy')
+    }
+
+    exclude 'META-INF/services/**'
+    relocate 'net.kyori', modGroup + '.lib.text'
+    relocate 'com.google.gson', modGroup + '.lib.gson'
+}
+
 
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
@@ -147,3 +156,16 @@ publishing {
         }
     }
 }
+
+reobf {
+    shadowJar {
+        dependsOn createMcpToSrg
+        mappings = createMcpToSrg.output
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+build.dependsOn tasks.shadowJar

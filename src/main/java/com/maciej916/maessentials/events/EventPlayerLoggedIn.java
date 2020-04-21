@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.events;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.kit.Kit;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
@@ -23,7 +24,7 @@ public class EventPlayerLoggedIn {
         EssentialPlayer eslPlayer = DataManager.newPlayer(player);
 
         if (eslPlayer != null) {
-            Log.debug("New player " + player.getDisplayName().getString() + " joined");
+            Log.debug("New player " + player.getDisplayName().getFormattedText() + " joined");
 
             if (player.getServer().isDedicatedServer()) {
                 // Add variable spawn force new
@@ -45,19 +46,19 @@ public class EventPlayerLoggedIn {
             PlayerRestriction ban = eslPlayerExisted.getRestrictions().getBan();
             if (ban != null) {
                 if (ban.getTime() == -1) {
-                    player.connection.disconnect(Methods.formatText("tempban.maessentials.success.perm.target", player.getDisplayName(), ban.getReason()));
+                    player.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.perm.target", player.getDisplayName().getFormattedText(), ban.getReason()));
                 } else {
                    if (ban.getTime() > currentTimestamp()) {
                        String displayTime = Time.formatDate(ban.getTime() - currentTimestamp());
-                       player.connection.disconnect(Methods.formatText("tempban.maessentials.success.target", player.getDisplayName(), displayTime, ban.getReason()));
+                       player.connection.disconnect(TextUtils.translateFromJson("tempban.maessentials.success.target", player.getDisplayName().getFormattedText(), displayTime, ban.getReason()));
                    }
                 }
             }
-            Log.debug("Player " + player.getDisplayName().getString() + " joined");
+            Log.debug("Player " + player.getDisplayName().getFormattedText() + " joined");
         }
 
         EssentialPlayer eslPlayerNew = DataManager.getPlayer(player);
-        eslPlayerNew.setUsername(player.getDisplayName().getString());
+        eslPlayerNew.setUsername(player.getDisplayName().getFormattedText());
         eslPlayerNew.saveData();
     }
 }

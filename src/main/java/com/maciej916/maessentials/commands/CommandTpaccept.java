@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.teleport.TeleportRequest;
 import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
@@ -32,9 +33,9 @@ public class CommandTpaccept {
         if (requests.size() == 1) {
             Teleport.acceptRequest(requests.get(0));
         } else if (requests.size() > 1) {
-            player.sendMessage(Methods.formatText("maessentials.specify.player"));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.specify.player"));
         } else {
-            player.sendMessage(Methods.formatText("tpa.maessentials.no_request"));
+            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.no_request"));
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -46,7 +47,7 @@ public class CommandTpaccept {
         if (tpR != null) {
             Teleport.acceptRequest(tpR);
         } else {
-            player.sendMessage(Methods.formatText("tpa.maessentials.not_found"));
+            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.not_found"));
         }
         return Command.SINGLE_SUCCESS;
     }

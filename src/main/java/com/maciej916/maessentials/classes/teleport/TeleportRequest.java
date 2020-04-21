@@ -3,7 +3,6 @@ package com.maciej916.maessentials.classes.teleport;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.config.ConfigValues;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.ITextComponent;
 
 import static com.maciej916.maessentials.libs.Methods.currentTimestamp;
 
@@ -33,16 +32,16 @@ public class TeleportRequest {
         return player;
     }
 
-    public ITextComponent getPlayerName() {
-        return player.getDisplayName();
+    public String getPlayerName() {
+        return player.getDisplayName().getFormattedText();
     }
 
     public ServerPlayerEntity getTarget() {
         return target;
     }
 
-    public ITextComponent getTargetName() {
-        return target.getDisplayName();
+    public String getTargetName() {
+        return target.getDisplayName().getFormattedText();
     }
 
     public Location getDestination() {

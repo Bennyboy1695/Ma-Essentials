@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -31,7 +32,7 @@ public class CommandSpawn {
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("spawn", ConfigValues.spawn_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(Methods.formatText("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -41,9 +42,9 @@ public class CommandSpawn {
         Location location = DataManager.getWorld().getSpawn();
         if (simpleTeleport(player, location, "spawn", ConfigValues.spawn_delay)) {
             if (ConfigValues.spawn_delay == 0) {
-                player.sendMessage(Methods.formatText("spawn.maessentials.success"));
+                player.sendMessage(TextUtils.translateFromJson("spawn.maessentials.success"));
             } else {
-                player.sendMessage(Methods.formatText("spawn.maessentials.success.wait", ConfigValues.spawn_delay));
+                player.sendMessage(TextUtils.translateFromJson("spawn.maessentials.success.wait", ConfigValues.spawn_delay));
             }
         }
 

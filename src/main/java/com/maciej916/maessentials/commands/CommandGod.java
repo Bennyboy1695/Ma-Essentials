@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -41,9 +42,9 @@ public class CommandGod {
     private static void godManage(ServerPlayerEntity player, ServerPlayerEntity target) {
         if (target.interactionManager.getGameType() == GameType.CREATIVE || target.interactionManager.getGameType() == GameType.SPECTATOR) {
             if (player == target) {
-                target.sendMessage(Methods.formatText("maessentials.invaild_gamemode"));
+                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode"));
             } else {
-                target.sendMessage(Methods.formatText("maessentials.invaild_gamemode.player", target.getDisplayName()));
+                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
             }
             return;
         }
@@ -52,19 +53,19 @@ public class CommandGod {
             target.abilities.disableDamage = false;
 
             if (player == target) {
-                player.sendMessage(Methods.formatText("god.maessentials.self.disabled"));
+                player.sendMessage(TextUtils.translateFromJson("god.maessentials.self.disabled"));
             } else {
-                player.sendMessage(Methods.formatText("god.maessentials.player.disabled", target.getDisplayName()));
-                target.sendMessage(Methods.formatText("god.maessentials.self.disabled"));
+                player.sendMessage(TextUtils.translateFromJson("god.maessentials.player.disabled", target.getDisplayName().getFormattedText()));
+                target.sendMessage(TextUtils.translateFromJson("god.maessentials.self.disabled"));
             }
         } else {
             target.abilities.disableDamage = true;
 
             if (player == target) {
-                player.sendMessage(Methods.formatText("god.maessentials.self.enabled"));
+                player.sendMessage(TextUtils.translateFromJson("god.maessentials.self.enabled"));
             } else {
-                player.sendMessage(Methods.formatText("god.maessentials.player.enabled", target.getDisplayName()));
-                target.sendMessage(Methods.formatText("god.maessentials.self.enabled"));
+                player.sendMessage(TextUtils.translateFromJson("god.maessentials.player.enabled", target.getDisplayName().getFormattedText()));
+                target.sendMessage(TextUtils.translateFromJson("god.maessentials.self.enabled"));
             }
         }
         target.sendPlayerAbilities();

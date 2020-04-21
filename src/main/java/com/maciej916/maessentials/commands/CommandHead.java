@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -42,7 +43,7 @@ public class CommandHead {
         CompoundNBT compound = stack.getOrCreateTag();
         compound.putString("SkullOwner", targetPlayer);
 
-        player.sendMessage(Methods.formatText("head.maessentials.done", targetPlayer));
+        player.sendMessage(TextUtils.translateFromJson("head.maessentials.done", targetPlayer));
         player.inventory.addItemStackToInventory(stack);
         player.world.playSound((PlayerEntity)null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
     }

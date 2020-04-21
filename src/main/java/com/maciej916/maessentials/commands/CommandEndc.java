@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -44,7 +45,7 @@ public class CommandEndc {
     private static void doEndc(ServerPlayerEntity player, ServerPlayerEntity target) {
         TextComponent endc = field_220115_d;
         if (player != target) {
-            endc = Methods.formatText("inv.maessentials.open", target.getDisplayName().getString(), endc);
+            endc = (TextComponent) TextUtils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), endc);
         }
 
         player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {

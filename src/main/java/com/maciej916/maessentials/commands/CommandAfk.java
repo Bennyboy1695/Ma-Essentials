@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -28,7 +29,7 @@ public class CommandAfk {
 
         long cooldown = eslPlayer.getUsage().getCommandCooldown("afk", ConfigValues.afk_command_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(Methods.formatText("maessentials.cooldown", cooldown));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown", cooldown));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -36,7 +37,7 @@ public class CommandAfk {
             eslPlayer.getUsage().setCommandUsage("afk");
             eslPlayer.saveData();
 
-            player.sendMessage(Methods.formatText("afk.maessentials.afk.true", player.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("afk.maessentials.afk.true", player.getDisplayName().getFormattedText()));
             eslPlayer.getTemp().setLocation(new Location(player));
             eslPlayer.getTemp().setAfk(true);
         }

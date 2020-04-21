@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
 import com.maciej916.maessentials.data.DataManager;
@@ -33,7 +34,7 @@ public class CommandTpahere {
 
     private static int tpahere(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -49,35 +50,35 @@ public class CommandTpahere {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (player == target) {
-            player.sendMessage(Methods.formatText("tpa.maessentials.self"));
+            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.self"));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getTeleportCooldown("tpa", ConfigValues.tpa_cooldown);
         if (cooldown != 0) {
-            player.sendMessage(Methods.formatText("maessentials.cooldown.teleport", cooldown));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
             return;
         }
 
         eslPlayer.getUsage().setCommandUsage("tpa");
         eslPlayer.saveData();
         if (requestTeleport(player, target, player, ConfigValues.tpa_timeout)) {
-            player.sendMessage(Methods.formatText("tpa.maessentials.request", target.getDisplayName()));
-            target.sendMessage(Methods.formatText("tpahere.maessentials.request.target", player.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request", target.getDisplayName().getFormattedText()));
+            target.sendMessage(TextUtils.translateFromJson("tpahere.maessentials.request.target", player.getDisplayName().getFormattedText()));
 
-            ClickEvent clickEventAccept = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpaccept " + player.getDisplayName().getString());
-            HoverEvent eventHoverAccept = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Methods.formatText("tpa.maessentials.request.target.accept.hover", "/tpaccept " + player.getDisplayName().getString()));
+            ClickEvent clickEventAccept = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpaccept " + player.getDisplayName().getFormattedText());
+            HoverEvent eventHoverAccept = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("tpa.maessentials.request.target.accept.hover", "/tpaccept " + player.getDisplayName().getFormattedText()));
             TextComponent textAccept = new StringTextComponent("/tpaccept");
             textAccept.getStyle().setClickEvent(clickEventAccept);
             textAccept.getStyle().setHoverEvent(eventHoverAccept);
-            target.sendMessage(Methods.formatText("tpa.maessentials.request.target.accept", textAccept));
+            target.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request.target.accept", textAccept));
 
-            ClickEvent clickEventDeny = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpdeny " + player.getDisplayName().getString());
-            HoverEvent eventHoverDeny = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Methods.formatText("tpa.maessentials.request.target.deny.hover", "/tpdeny " + player.getDisplayName().getString()));
+            ClickEvent clickEventDeny = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tpdeny " + player.getDisplayName().getFormattedText());
+            HoverEvent eventHoverDeny = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("tpa.maessentials.request.target.deny.hover", "/tpdeny " + player.getDisplayName().getFormattedText()));
             TextComponent textDeny = new StringTextComponent("/tpdeny");
             textDeny.getStyle().setClickEvent(clickEventDeny);
             textDeny.getStyle().setHoverEvent(eventHoverDeny);
-            target.sendMessage(Methods.formatText("tpa.maessentials.request.target.deny", textDeny));
+            target.sendMessage(TextUtils.translateFromJson("tpa.maessentials.request.target.deny", textDeny));
         }
     }
 }

@@ -15,6 +15,6 @@ public class EventPlayerLoggedOut {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
         eslPlayer.cleanTemp();
 
-        Log.debug("Player " + player.getDisplayName().getString() + " leave");
+        Log.debug("Player " + player.getDisplayName().getFormattedText() + " leave");
     }
 }

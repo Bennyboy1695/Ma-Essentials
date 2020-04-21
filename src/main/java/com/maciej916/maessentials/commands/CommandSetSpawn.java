@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.world.WorldData;
 import com.maciej916.maessentials.data.DataManager;
@@ -28,7 +29,7 @@ public class CommandSetSpawn {
         worldData.setSpawn(new Location(player));
         worldData.saveData();
 
-        player.sendMessage(Methods.formatText("setspawn.maessentials.success"));
+        player.sendMessage(TextUtils.translateFromJson("setspawn.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }

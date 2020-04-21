@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -24,7 +25,7 @@ public class CommandUnban {
 
     private static int unban(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -33,16 +34,16 @@ public class CommandUnban {
         EssentialPlayer eslTargetPlayer = DataManager.getPlayer(targetPlayer);
 
         if (eslTargetPlayer == null) {
-            player.sendMessage(Methods.formatText("maessentials.not_found.player", targetPlayer));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.not_found.player", targetPlayer));
         } else {
             PlayerRestriction ban = eslTargetPlayer.getRestrictions().getBan();
 
             if (ban == null || (currentTimestamp() > ban.getTime() && ban.getTime() != -1)) {
-                player.sendMessage(Methods.formatText("unban.maessentials.not_banned", eslTargetPlayer.getUsername()));
+                player.sendMessage(TextUtils.translateFromJson("unban.maessentials.not_banned", eslTargetPlayer.getUsername()));
             } else {
                 eslTargetPlayer.getRestrictions().unBan();
                 eslTargetPlayer.saveData();
-                player.server.getPlayerList().sendMessage(Methods.formatText("unban.maessentials.success", eslTargetPlayer.getUsername()));
+                player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("unban.maessentials.success", eslTargetPlayer.getUsername()));
             }
         }
 

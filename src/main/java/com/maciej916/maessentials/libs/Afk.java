@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.libs;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -26,7 +27,7 @@ public class Afk {
                         if (lastLocation != null && checkDetailedLocation(playerLocation, lastLocation)) {
                             if (!eslPlayer.getTemp().isAfk()) {
                                 if (currentTimestamp() - ConfigValues.afk_auto_time  >= eslPlayer.getTemp().getLastMoveTime()) {
-                                    players.sendMessage(Methods.formatText("afk.maessentials.afk.true", player.getDisplayName()));
+                                    players.sendMessage(TextUtils.translateFromJson("afk.maessentials.afk.true", player.getDisplayName().getFormattedText()));
                                     eslPlayer.getTemp().setAfk(true);
                                 }
                             } else {
@@ -36,7 +37,7 @@ public class Afk {
                             }
                         } else {
                             if (eslPlayer.getTemp().isAfk()) {
-                                players.sendMessage(Methods.formatText("afk.maessentials.afk.false", player.getDisplayName()));
+                                players.sendMessage(TextUtils.translateFromJson("afk.maessentials.afk.false", player.getDisplayName().getFormattedText()));
                                 eslPlayer.getTemp().setAfk(false);
                             }
                             eslPlayer.getTemp().setLocation(playerLocation);

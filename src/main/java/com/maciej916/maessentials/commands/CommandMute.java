@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -38,13 +39,13 @@ public class CommandMute {
 
     private static int mute(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int mutePlayer(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("mute.maessentials.provide.time"));
+        player.sendMessage(TextUtils.translateFromJson("mute.maessentials.provide.time"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -75,12 +76,12 @@ public class CommandMute {
         }
 
         if (mutetime == 0) {
-            player.sendMessage(Methods.formatText("maessentials.illegal_date"));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.illegal_date"));
             return;
         }
 
         if (mute != null && (currentTimestamp() < mute.getTime() ||  mute.getTime() == -1)) {
-            player.sendMessage(Methods.formatText("mute.maessentials.already_muted", target.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("mute.maessentials.already_muted", target.getDisplayName().getFormattedText()));
             return;
         }
 
@@ -88,14 +89,14 @@ public class CommandMute {
         eslTargetPlayer.saveData();
 
         if (mutetime == -1) {
-            player.server.getPlayerList().sendMessage(Methods.formatText("mute.maessentials.success.perm", target.getDisplayName(), player.getDisplayName(), reason));
-            target.sendMessage(Methods.formatText("mute.maessentials.success.perm.target"));
+            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("mute.maessentials.success.perm", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), reason));
+            target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.perm.target"));
         } else {
             String displayTime = Time.formatDate(mutetime - currentTimestamp());
-            player.server.getPlayerList().sendMessage(Methods.formatText("mute.maessentials.success", target.getDisplayName(), player.getDisplayName(), displayTime, reason));
-            target.sendMessage(Methods.formatText("mute.maessentials.success.target", displayTime));
+            player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("mute.maessentials.success", target.getDisplayName().getFormattedText(), player.getDisplayName().getFormattedText(), displayTime, reason));
+            target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target", displayTime));
         }
 
-        target.sendMessage(Methods.formatText("mute.maessentials.success.target.reason", reason));
+        target.sendMessage(TextUtils.translateFromJson("mute.maessentials.success.target.reason", reason));
     }
 }

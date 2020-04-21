@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
@@ -28,7 +29,7 @@ public class CommandUp {
 
     private static int up(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.location"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.location"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -59,13 +60,13 @@ public class CommandUp {
 
         if (tp) {
             if (number > 0) {
-                player.sendMessage(Methods.formatText("up.maessentials.success.up", number));
+                player.sendMessage(TextUtils.translateFromJson("up.maessentials.success.up", number));
             } else {
                 number = number * -1;
-                player.sendMessage(Methods.formatText("up.maessentials.success.down", number));
+                player.sendMessage(TextUtils.translateFromJson("up.maessentials.success.down", number));
             }
         } else {
-            player.sendMessage(Methods.formatText("maessentials.invalid.location"));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.invalid.location"));
         }
 
         return Command.SINGLE_SUCCESS;

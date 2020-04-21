@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -32,7 +33,7 @@ public class CommandSun {
             worldData.setRainTime(0);
         }
 
-        player.sendMessage(Methods.formatText("sun.maessentials.success"));
+        player.sendMessage(TextUtils.translateFromJson("sun.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }

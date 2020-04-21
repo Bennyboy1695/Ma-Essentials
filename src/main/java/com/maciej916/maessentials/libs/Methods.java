@@ -1,6 +1,7 @@
 
 package com.maciej916.maessentials.libs;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.kit.Kit;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
@@ -84,7 +85,7 @@ public class Methods {
             }
             return true;
         } catch (Exception e) {
-            player.sendMessage(Methods.formatText("kit.maessentials.parse_error"));
+            player.sendMessage(TextUtils.translateFromJson("kit.maessentials.parse_error"));
             return false;
         }
     }
@@ -93,12 +94,12 @@ public class Methods {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getTemp().isTeleportActive()) {
-            player.sendMessage(Methods.formatText("teleport.maessentials.active"));
+            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.active"));
             return false;
         }
 
         if (delay == 0) {
-            player.sendMessage(Methods.formatText("teleport.maessentials.teleported"));
+            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.teleported"));
             doTeleport(player, location, true, true);
             return true;
         }
@@ -113,13 +114,13 @@ public class Methods {
         EssentialPlayer eslPlayer = DataManager.getPlayer(player);
 
         if (eslPlayer.getTemp().isTeleportActive()) {
-            player.sendMessage(Methods.formatText("teleport.maessentials.active"));
+            player.sendMessage(TextUtils.translateFromJson("teleport.maessentials.active"));
             return false;
         }
 
         TeleportRequest existTpR = Teleport.findRequest(creator, player, target);
         if (existTpR != null) {
-            player.sendMessage(Methods.formatText("tpa.maessentials.exist", target.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("tpa.maessentials.exist", target.getDisplayName().getFormattedText()));
             return false;
         }
 
@@ -141,7 +142,7 @@ public class Methods {
     }
 
     static void kickPlayer(ServerPlayerEntity player, StringTextComponent op, String reason) {
-        player.server.getPlayerList().sendMessage(formatText("kick.maessentials.done", player.getDisplayName(), op, reason));
+        player.server.getPlayerList().sendMessage(formatText("kick.maessentials.done", player.getDisplayName().getFormattedText(), op, reason));
         player.connection.disconnect(new StringTextComponent(reason));
     }
 }

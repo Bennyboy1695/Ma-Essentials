@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -37,7 +38,7 @@ public class CommandGm {
 
     private static int gm(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -84,16 +85,16 @@ public class CommandGm {
                 }
                 break;
             default :
-                player.sendMessage(Methods.formatText("gm.maessentials.invalid"));
+                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.invalid"));
         }
 
         if (changed) {
-            ITextComponent newGm = targetPlayer.interactionManager.getGameType().getDisplayName();
+            String newGm = targetPlayer.interactionManager.getGameType().getDisplayName().getFormattedText();
             if (player == targetPlayer) {
-                player.sendMessage(Methods.formatText("gm.maessentials.self", newGm));
+                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.self", newGm));
             } else {
-                player.sendMessage(Methods.formatText("gm.maessentials.player", targetPlayer.getDisplayName(), newGm));
-                targetPlayer.sendMessage(Methods.formatText("gm.maessentials.self", newGm));
+                player.sendMessage(TextUtils.translateFromJson("gm.maessentials.player", targetPlayer.getDisplayName().getFormattedText(), newGm));
+                targetPlayer.sendMessage(TextUtils.translateFromJson("gm.maessentials.self", newGm));
             }
         }
     }

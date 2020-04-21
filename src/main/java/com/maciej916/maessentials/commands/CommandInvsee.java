@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -24,9 +25,9 @@ public class CommandInvsee {
     private static int invsee(CommandSource source, ServerPlayerEntity target) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
         if (player == target) {
-            player.sendMessage(Methods.formatText("invsee.maessentials.self"));
+            player.sendMessage(TextUtils.translateFromJson("invsee.maessentials.self"));
         } else {
-            TextComponent name = Methods.formatText("inv.maessentials.open", target.getDisplayName().getString(), "Inventory");
+            TextComponent name = (TextComponent) TextUtils.translateFromJson("inv.maessentials.open", target.getDisplayName().getFormattedText(), "Inventory");
             player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {
                 return new ChestContainer(ContainerType.GENERIC_9X4, id, player.inventory, target.inventory, 4);
             }, name));

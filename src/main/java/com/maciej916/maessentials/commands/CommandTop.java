@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.libs.Methods;
 import com.maciej916.maessentials.libs.Teleport;
@@ -45,7 +46,7 @@ public class CommandTop {
                     if (chunk.getBlockState(headPos).getMaterial().equals(Material.AIR)) {
                         Location topLocation = new Location(player.getPosX(), y-1, player.getPosZ(), player.rotationYaw, player.rotationPitch, player.dimension.getId());
                         Teleport.doTeleport(player, topLocation, true, true);
-                        player.sendMessage(Methods.formatText("top.maessentials.teleported"));
+                        player.sendMessage(TextUtils.translateFromJson("top.maessentials.teleported"));
                         break;
                     }
                 }

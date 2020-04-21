@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
@@ -26,7 +27,7 @@ public class CommandDelHome {
 
     private static int delHome(CommandContext<CommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().asPlayer();
-        player.sendMessage(Methods.formatText("delhome.maessentials.specify_name"));
+        player.sendMessage(TextUtils.translateFromJson("delhome.maessentials.specify_name"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -36,13 +37,13 @@ public class CommandDelHome {
         String name = StringArgumentType.getString(context, "homeName").toLowerCase();
 
         if (eslPlayer.getHomeData().getHome(name) == null) {
-            player.sendMessage(Methods.formatText("home.maessentials.not_exist", name));
+            player.sendMessage(TextUtils.translateFromJson("home.maessentials.not_exist", name));
             return Command.SINGLE_SUCCESS;
         }
 
         eslPlayer.getHomeData().delHome(name);
         eslPlayer.saveHomes();
-        player.sendMessage(Methods.formatText("delhome.maessentials.done", name));
+        player.sendMessage(TextUtils.translateFromJson("delhome.maessentials.done", name));
 
         return Command.SINGLE_SUCCESS;
     }

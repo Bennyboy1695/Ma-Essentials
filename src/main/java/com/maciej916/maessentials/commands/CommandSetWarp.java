@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.data.DataManager;
 import com.maciej916.maessentials.libs.Methods;
@@ -35,9 +36,9 @@ public class CommandSetWarp {
         String warpName = StringArgumentType.getString(context, "warpName").toLowerCase();
 
         if (DataManager.getWarp().setWarp(warpName, new Location(player))) {
-            player.sendMessage(Methods.formatText("setwarp.maessentials.success", warpName));
+            player.sendMessage(TextUtils.translateFromJson("setwarp.maessentials.success", warpName));
         } else {
-            player.sendMessage(Methods.formatText("setwarp.maessentials.exist", warpName));
+            player.sendMessage(TextUtils.translateFromJson("setwarp.maessentials.exist", warpName));
         }
 
         return Command.SINGLE_SUCCESS;

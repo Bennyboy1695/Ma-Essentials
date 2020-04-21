@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -24,7 +25,7 @@ public class CommandUnmute {
 
     private static int unmute(CommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.asPlayer();
-        player.sendMessage(Methods.formatText("maessentials.provide.player"));
+        player.sendMessage(TextUtils.translateFromJson("maessentials.provide.player"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -33,16 +34,16 @@ public class CommandUnmute {
         EssentialPlayer eslTargetPlayer = DataManager.getPlayer(targetPlayer);
 
         if (eslTargetPlayer == null) {
-            player.sendMessage(Methods.formatText("maessentials.not_found.player", targetPlayer));
+            player.sendMessage(TextUtils.translateFromJson("maessentials.not_found.player", targetPlayer));
         } else {
             PlayerRestriction mute = eslTargetPlayer.getRestrictions().getMute();
 
             if (mute == null || (currentTimestamp() > mute.getTime() && mute.getTime() != -1)) {
-                player.sendMessage(Methods.formatText("unmmute.maessentials.not_muted", eslTargetPlayer.getUsername()));
+                player.sendMessage(TextUtils.translateFromJson("unmmute.maessentials.not_muted", eslTargetPlayer.getUsername()));
             } else {
                 eslTargetPlayer.getRestrictions().unMute();
                 eslTargetPlayer.saveData();
-                player.server.getPlayerList().sendMessage(Methods.formatText("unmmute.maessentials.success", eslTargetPlayer.getUsername()));
+                player.server.getPlayerList().sendMessage(TextUtils.translateFromJson("unmmute.maessentials.success", eslTargetPlayer.getUsername()));
             }
         }
 

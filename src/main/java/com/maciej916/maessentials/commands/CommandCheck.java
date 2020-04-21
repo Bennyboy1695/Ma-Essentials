@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.classes.player.PlayerRestriction;
 import com.maciej916.maessentials.data.DataManager;
@@ -42,17 +43,17 @@ public class CommandCheck {
             }
         }
         if (restrictions.size() > 0) {
-            player.sendMessage(Methods.formatText("check.maessentials.player.banned.list"));
+            player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.banned.list"));
             for (PlayerRestriction restriction : restrictions) {
                 if (restriction.getTime() == -1) {
-                    player.sendMessage(Methods.formatText("check.maessentials.player.banned.perm", restriction.getUsername(), restriction.getPlayerUUID(), restriction.getReason()));
+                    player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.banned.perm", restriction.getUsername(), restriction.getPlayerUUID(), restriction.getReason()));
                 } else {
                     String displayTime = Time.formatDate(restriction.getTime() - currentTimestamp());
-                    player.sendMessage(Methods.formatText("check.maessentials.player.banned", restriction.getUsername(), restriction.getPlayerUUID(), displayTime, restriction.getReason()));
+                    player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.banned", restriction.getUsername(), restriction.getPlayerUUID(), displayTime, restriction.getReason()));
                 }
             }
         } else {
-            player.sendMessage(Methods.formatText("check.maessentials.player.banned.empty"));
+            player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.banned.empty"));
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -70,17 +71,17 @@ public class CommandCheck {
             }
         }
         if (restrictions.size() > 0) {
-            player.sendMessage(Methods.formatText("check.maessentials.player.muted.list"));
+            player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.muted.list"));
             for (PlayerRestriction restriction : restrictions) {
                 if (restriction.getTime() == -1) {
-                    player.sendMessage(Methods.formatText("check.maessentials.player.muted.perm", restriction.getUsername(), restriction.getPlayerUUID(), restriction.getReason()));
+                    player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.muted.perm", restriction.getUsername(), restriction.getPlayerUUID(), restriction.getReason()));
                 } else {
                     String displayTime = Time.formatDate(restriction.getTime() - currentTimestamp());
-                    player.sendMessage(Methods.formatText("check.maessentials.player.muted", restriction.getUsername(), restriction.getPlayerUUID(), displayTime, restriction.getReason()));
+                    player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.muted", restriction.getUsername(), restriction.getPlayerUUID(), displayTime, restriction.getReason()));
                 }
             }
         } else {
-            player.sendMessage(Methods.formatText("check.maessentials.player.muted.empty"));
+            player.sendMessage(TextUtils.translateFromJson("check.maessentials.player.muted.empty"));
         }
         return Command.SINGLE_SUCCESS;
     }

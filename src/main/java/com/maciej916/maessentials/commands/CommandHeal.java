@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -39,9 +40,9 @@ public class CommandHeal {
     private static void doHeal(ServerPlayerEntity player, ServerPlayerEntity target) {
         if (target.interactionManager.getGameType() == GameType.CREATIVE || target.interactionManager.getGameType() == GameType.SPECTATOR) {
             if (player == target) {
-                target.sendMessage(Methods.formatText("maessentials.invaild_gamemode"));
+                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode"));
             } else {
-                target.sendMessage(Methods.formatText("maessentials.invaild_gamemode.player", target.getDisplayName()));
+                target.sendMessage(TextUtils.translateFromJson("maessentials.invaild_gamemode.player", target.getDisplayName().getFormattedText()));
             }
             return;
         }
@@ -52,10 +53,10 @@ public class CommandHeal {
         target.clearActivePotions();
 
         if (player == target) {
-            target.sendMessage(Methods.formatText("heal.maessentials.self"));
+            target.sendMessage(TextUtils.translateFromJson("heal.maessentials.self"));
         } else {
-            player.sendMessage(Methods.formatText("heal.maessentials.player", target.getDisplayName()));
-            target.sendMessage(Methods.formatText("heal.maessentials.player.target", player.getDisplayName()));
+            player.sendMessage(TextUtils.translateFromJson("heal.maessentials.player", target.getDisplayName().getFormattedText()));
+            target.sendMessage(TextUtils.translateFromJson("heal.maessentials.player.target", player.getDisplayName().getFormattedText()));
         }
     }
 }

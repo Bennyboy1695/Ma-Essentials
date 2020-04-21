@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -49,9 +50,9 @@ public class CommandSetHome {
         if ((eslPlayer.getHomeData().getHomes().size() < homes_limit)  || (eslPlayer.getHomeData().getHomes().size() == homes_limit && eslPlayer.getHomeData().getHome(name) != null)) {
             eslPlayer.getHomeData().setHome(name, new Location(player));
             eslPlayer.saveHomes();
-            player.sendMessage(Methods.formatText("sethome.maessentials.done", name));
+            player.sendMessage(TextUtils.translateFromJson("sethome.maessentials.done", name));
         } else {
-            player.sendMessage(Methods.formatText("sethome.maessentials.max_homes", homes_limit));
+            player.sendMessage(TextUtils.translateFromJson("sethome.maessentials.max_homes", homes_limit));
        }
     }
 }

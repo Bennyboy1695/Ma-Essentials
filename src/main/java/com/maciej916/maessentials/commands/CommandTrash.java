@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -25,7 +26,7 @@ public class CommandTrash {
 
         player.openContainer(new SimpleNamedContainerProvider((id, inv, items) -> {
             return ChestContainer.createGeneric9X4(id, inv);
-        }, Methods.formatText("trash.maessentials.open")));
+        }, TextUtils.translateFromJson("trash.maessentials.open")));
 
         return Command.SINGLE_SUCCESS;
     }

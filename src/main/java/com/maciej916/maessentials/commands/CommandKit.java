@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.kit.Kit;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.data.DataManager;
@@ -43,14 +44,14 @@ public class CommandKit {
         ServerPlayerEntity player = context.getSource().asPlayer();
         Set<String> kits = DataManager.getKit().getKits().keySet();
 
-        TextComponent kitList = Methods.formatText("kit.maessentials.list");
+        TextComponent kitList = (TextComponent) TextUtils.translateFromJson("kit.maessentials.list");
         if (kits.size() != 0) {
             int i = 1;
             for (String name : kits) {
                 ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/kit " + name);
-                HoverEvent eventHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Methods.formatText("kit.maessentials.list.kit", "/kit " + name));
+                HoverEvent eventHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextUtils.translateFromJson("kit.maessentials.list.kit", "/kit " + name));
 
-                TextComponent kit = Methods.formatText("kit.maessentials.list.kit", name);
+                TextComponent kit = (TextComponent) TextUtils.translateFromJson("kit.maessentials.list.kit", name);
                 kit.getStyle().setClickEvent(clickEvent);
                 kit.getStyle().setHoverEvent(eventHover);
 
@@ -80,14 +81,14 @@ public class CommandKit {
 
         Kit kit = DataManager.getKit().getKit(name);
         if (kit == null) {
-            player.sendMessage(Methods.formatText("kit.maessentials.not_exist", name));
+            player.sendMessage(TextUtils.translateFromJson("kit.maessentials.not_exist", name));
             return;
         }
 
         long cooldown = eslPlayer.getUsage().getKitCooldown(name, kit.getDuration());
         if (cooldown != 0) {
             String displayTime = Time.formatDate(cooldown);
-            player.sendMessage(Methods.formatText("kit.maessentials.wait", displayTime));
+            player.sendMessage(TextUtils.translateFromJson("kit.maessentials.wait", displayTime));
             return;
         }
 
@@ -96,7 +97,7 @@ public class CommandKit {
             eslPlayer.saveData();
 
             player.world.playSound((PlayerEntity)null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            player.sendMessage(Methods.formatText("kit.maessentials.received", name));
+            player.sendMessage(TextUtils.translateFromJson("kit.maessentials.received", name));
         }
     }
 }

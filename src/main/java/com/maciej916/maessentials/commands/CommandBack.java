@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;
@@ -29,7 +30,7 @@ public class CommandBack {
 
         Location location = eslPlayer.getData().getLastLocation();
         if (location == null) {
-            player.sendMessage(Methods.formatText("back.maessentials.not_found"));
+            player.sendMessage(TextUtils.translateFromJson("back.maessentials.not_found"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -39,13 +40,13 @@ public class CommandBack {
         if (ConfigValues.back_death_custom_cooldown != 0 && recentlyDied) {
             long cooldown = eslPlayer.getUsage().getTeleportCooldown("back", ConfigValues.back_death_custom_cooldown);
             if (cooldown != 0) {
-                player.sendMessage(Methods.formatText("back.maessentials.cooldown.teleport", cooldown));
+                player.sendMessage(TextUtils.translateFromJson("back.maessentials.cooldown.teleport", cooldown));
                 return Command.SINGLE_SUCCESS;
             }
         } else {
             long cooldown = eslPlayer.getUsage().getTeleportCooldown("back", ConfigValues.back_cooldown);
             if (cooldown != 0) {
-                player.sendMessage(Methods.formatText("maessentials.cooldown.teleport", cooldown));
+                player.sendMessage(TextUtils.translateFromJson("maessentials.cooldown.teleport", cooldown));
                 return Command.SINGLE_SUCCESS;
             }
         }
@@ -55,9 +56,9 @@ public class CommandBack {
 
         if (simpleTeleport(player, location, "back", ConfigValues.back_delay)) {
             if (ConfigValues.back_delay == 0) {
-                player.sendMessage(Methods.formatText("back.maessentials.success"));
+                player.sendMessage(TextUtils.translateFromJson("back.maessentials.success"));
             } else {
-                player.sendMessage(Methods.formatText("back.maessentials.success.wait", ConfigValues.back_delay));
+                player.sendMessage(TextUtils.translateFromJson("back.maessentials.success.wait", ConfigValues.back_delay));
             }
         }
 

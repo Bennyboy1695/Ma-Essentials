@@ -1,5 +1,6 @@
 package com.maciej916.maessentials.commands;
 
+import com.maciej916.maessentials.TextUtils;
 import com.maciej916.maessentials.libs.Methods;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -26,7 +27,7 @@ public class CommandNight {
             serverworld.setDayTime(20000);
         }
 
-        player.sendMessage(Methods.formatText("night.maessentials.success"));
+        player.sendMessage(TextUtils.translateFromJson("night.maessentials.success"));
         return Command.SINGLE_SUCCESS;
     }
 }
