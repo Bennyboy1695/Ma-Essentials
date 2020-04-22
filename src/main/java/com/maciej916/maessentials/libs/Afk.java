@@ -1,6 +1,6 @@
 package com.maciej916.maessentials.libs;
 
-import com.maciej916.maessentials.Utils;
+import com.maciej916.maessentials.utils.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.maciej916.maessentials.classes.player.EssentialPlayer;
 import com.maciej916.maessentials.config.ConfigValues;

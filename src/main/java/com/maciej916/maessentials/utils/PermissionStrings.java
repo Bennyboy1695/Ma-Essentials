@@ -1,4 +1,4 @@
-package com.maciej916.maessentials;
+package com.maciej916.maessentials.utils;
 
 public class PermissionStrings {
 

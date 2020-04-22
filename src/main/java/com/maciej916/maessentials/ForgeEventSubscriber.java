@@ -1,6 +1,7 @@
 package com.maciej916.maessentials;
 
 import com.maciej916.maessentials.events.*;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -40,6 +41,11 @@ public final class ForgeEventSubscriber {
     @SubscribeEvent
     public static void worldTick(TickEvent.WorldTickEvent event) {
         EventWorldTick.event(event);
+    }
+
+    @SubscribeEvent
+    public static void commandRan(CommandEvent event) {
+        EventCommandRan.event(event);
     }
 
 }

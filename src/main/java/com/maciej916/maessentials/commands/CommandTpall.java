@@ -1,7 +1,7 @@
 package com.maciej916.maessentials.commands;
 
-import com.maciej916.maessentials.PermissionStrings;
-import com.maciej916.maessentials.Utils;
+import com.maciej916.maessentials.utils.PermissionStrings;
+import com.maciej916.maessentials.utils.Utils;
 import com.maciej916.maessentials.classes.Location;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;

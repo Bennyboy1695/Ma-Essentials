@@ -1,7 +1,8 @@
-package com.maciej916.maessentials;
+package com.maciej916.maessentials.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.maciej916.maessentials.MaEssentials;
 import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 public class Utils {
@@ -49,9 +51,10 @@ public class Utils {
     public static Predicate<CommandSource> hasPermission(String permission) {
         return source -> {
             if (source.getEntity() != null) {
-                return PermissionAPI.hasPermission((ServerPlayerEntity) source.getEntity(), permission);
+                return PermissionAPI.hasPermission((PlayerEntity) source.getEntity(), permission);
+                //return source.hasPermissionLevel(1);
             } else {
-                return source.hasPermissionLevel(1);
+                return source.hasPermissionLevel(4);
             }
         };
     }
