@@ -169,6 +169,8 @@ public class Commands {
             if (ConfigValues.invsee_enable) {
                 CommandInvsee.register(dispatcher);
             }
+
+            CommandSudo.register(dispatcher);
         }
 
         // Reload

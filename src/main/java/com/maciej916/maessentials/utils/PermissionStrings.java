@@ -66,6 +66,9 @@ public class PermissionStrings {
         public static String SPEED = MAIN + ".speed";
         public static String SPEED_OTHERS = MAIN + ".speed.others";
 
+        public static String SUDO = MAIN + ".sudo";
+        public static String SUDO_CHAT = MAIN + ".sudo.chat";
+
         public static String SUICIDE = MAIN + ".suicide";
         public static String SUICIDE_OTHERS = MAIN + ".suicide.others";
 
